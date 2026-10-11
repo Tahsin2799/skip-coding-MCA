@@ -1,0 +1,7 @@
+"metric","validity_flag","flagged_rows","finite_flagged_rows"
+"auc_index_scored","separation_target",4,4
+"auc_model_scored","separation_target",4,4
+"log_or_top","separation_dev",6453,6453
+"log_or_top_target","separation_target",4,4
+"beta_within","separation_dev",6453,6453
+"beta_between","separation_dev",6453,6453

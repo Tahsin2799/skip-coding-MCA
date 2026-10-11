@@ -1,0 +1,91 @@
+---
+title: "Auditing questionnaire skips before building an MCA index"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Auditing questionnaire skips before building an MCA index}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+Household surveys often ask some questions only of people who pass a filter
+question: advice about blood pressure only of people already diagnosed,
+questions about a child only of recent mothers, questions about a service only
+of its users. If such items enter a multiple correspondence analysis (MCA)
+index, the coding of the skip decides how much of the filter enters the index,
+and the filter can take the index over. This vignette runs the audit on a
+simulated survey and shows what happens to targeting.
+
+## A survey with filtered items
+
+`simulate_filtered_survey()` draws six three-level deprivation items, a latent
+need, contact with care that depends on cluster access more than on need, and
+four advice items asked only of people in contact with care.
+
+```{r}
+library(skipMCA)
+dev <- simulate_filtered_survey(n_clusters = 200, contact = 0.5, seed = 1)
+items <- paste0("advice", 1:4)
+inputs <- paste0("x", 1:6)
+table(asked = !is.na(dev$advice1))
+```
+
+## The audit
+
+`skip_audit()` needs development data only. It reports, for each coding, the
+mean squared correlation ratio of the filtered items with eligibility (how much
+of the filter each item carries, which the closed form gives exactly), the
+inertia ratio (the filtered block's maximum axial inertia times its number of
+items, against the substantive block's), and how much of the index's first axis
+the filtered block and eligibility explain.
+
+```{r}
+audit <- skip_audit(dev, items, inputs, budget = 0.1)
+audit
+```
+
+Missing single, the skip as its own category, gives every filtered item a
+squared correlation ratio with eligibility of 1, and the first axis is the
+filter. Subset MCA keeps one minus the share
+asked. Missing fuzzy average, which gives the skipped the answers of those
+asked, carries none. Under it, a filtered item's squared correlation ratio with
+any score is at most the share asked, so its capture ratio stays low.
+
+```{r}
+audit$items[audit$items$item == "advice1", ]
+```
+
+## What capture does to targeting
+
+Fit the index under two codings, deploy it in a population where only 20
+percent have been in contact with care, and compare the allocations against
+the true need.
+
+```{r}
+target <- simulate_filtered_survey(n_clusters = 200, contact = 0.2, seed = 2)
+score_with <- function(coding) {
+  fit <- skip_mca(dev, items, inputs, coding = coding, orient = dev$need)
+  predict(fit, target)[, 1]
+}
+codings <- c("category", "subset", "no", "fuzzy_average", "drop")
+round(sapply(codings, function(cd)
+  targeting_metrics(score_with(cd), target$need, target$cluster)), 3)
+```
+
+The index that codes the skip as its own category ranks communities by their
+contact with care, which here is nearly unrelated to need. Subset MCA and the
+"no" coding, just above an inertia ratio of 1 in the audit, lose part of the
+ranking. Missing fuzzy average ranks communities as well as dropping the
+items, because the filter has no direction in it to follow.
+
+## When a dominant filter is benign
+
+The audit cannot decide one thing: whether passing the filter is part of what
+the index should measure. Owning land is part of wealth, so a block of
+land-use items asked only of landowners may rightly pull a wealth index. Contact
+with care is not part of need, so a need index should not follow it. When the
+filter measures access, use missing fuzzy average or drop the filtered items,
+and judge the index by its allocation over everyone it will serve.
