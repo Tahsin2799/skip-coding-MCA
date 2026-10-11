@@ -1,0 +1,28 @@
+Package: skipMCA
+Type: Package
+Title: Questionnaire Skips in Multiple Correspondence Analysis Indices
+Version: 0.1.0
+Authors@R: c(
+    person("A. F. M. Tahsin", "Shahriar", role = c("aut", "cre"),
+           email = "tshahriar@isrt.ac.bd",
+           comment = c(ORCID = "0009-0003-0565-0803")))
+Description: Audits how much of a questionnaire filter each coding of skipped
+    items carries into an index built by multiple correspondence analysis
+    (MCA). Items asked only of respondents who pass one filter question can
+    dominate the first MCA axis, which then follows the filter. The package
+    computes the closed-form squared correlation ratio between eligibility and
+    each coded item, an inertia ratio comparing the filtered items with the
+    other items, the share of the index explained by eligibility, and a budget
+    check, all from development data. It fits MCA indices under missing single
+    (the skip as its own category), the skip as the reference answer, subset
+    (specific) MCA, or missing fuzzy average (van der Heijden and Escofier
+    2003), places new respondents by the transition formula, and scores
+    allocations against a known need criterion.
+License: MIT + file LICENSE
+Depends: R (>= 4.1.0)
+Imports: stats, utils
+Suggests: FactoMineR, knitr, rmarkdown, testthat (>= 3.0.0)
+VignetteBuilder: knitr
+Encoding: UTF-8
+Config/roxygen2/version: 8.1.0
+Config/testthat/edition: 3

@@ -1,0 +1,64 @@
+"cell","quadrant","n","deprivation","coherence","adj_inertia"
+"albania | diber | rural","Q1",950,0.3303,0.0772,34.7
+"albania | fier | rural","Q1",727,0.2294,0.0557,44
+"albania | korce | rural","Q1",727,0.3093,0.074,41.2
+"albania | kukes | rural","Q3",931,0.3662,0.0527,35.6
+"albania | tirane | urban","Q1",927,0.1337,0.0817,39.8
+"bangladesh | chittagong | rural","Q3",790,0.484,0.0833,58.7
+"bangladesh | dhaka | urban","Q2",822,0.307,0.1441,55.1
+"bangladesh | khulna | rural","Q3",784,0.5444,0.0679,47.8
+"bangladesh | mymensingh | rural","Q4",739,0.5684,0.1242,59.3
+"bangladesh | rajshahi | rural","Q3",811,0.5491,0.0734,45.6
+"bangladesh | rangpur | rural","Q3",794,0.5624,0.0837,59.7
+"bangladesh | sylhet | rural","Q4",773,0.5327,0.1185,71.7
+"india | andhra pradesh | rural","Q1",1890,0.3228,0.0735,50.1
+"india | andhra pradesh | urban","Q1",721,0.1932,0.0668,34
+"india | arunachal pradesh | rural","Q1",3725,0.3073,0.0885,61.2
+"india | arunachal pradesh | urban","Q1",976,0.154,0.0793,64.3
+"india | assam | rural","Q4",7361,0.4323,0.0961,79.6
+"india | assam | urban","Q2",1116,0.2405,0.1297,70
+"india | bihar | rural","Q3",7530,0.5064,0.0837,76.9
+"india | bihar | urban","Q2",1133,0.2904,0.1014,67.3
+"india | chhattisgarh | rural","Q4",5514,0.4841,0.1003,73.4
+"india | chhattisgarh | urban","Q2",1295,0.2082,0.0952,60.5
+"india | gujarat | rural","Q4",5935,0.3812,0.1065,79.7
+"india | gujarat | urban","Q1",2595,0.1583,0.0901,65.7
+"india | haryana | rural","Q1",3604,0.3041,0.0705,38.1
+"india | haryana | urban","Q2",1434,0.1578,0.0957,58.3
+"india | himachal pradesh | rural","Q1",2316,0.2835,0.0737,41.6
+"india | jammu & kashmir | rural","Q2",4459,0.2894,0.1058,70.6
+"india | jammu & kashmir | urban","Q2",953,0.1332,0.0943,48.5
+"india | jharkhand | rural","Q3",4692,0.5325,0.0808,70.7
+"india | jharkhand | urban","Q2",1208,0.2546,0.152,79.1
+"india | karnataka | rural","Q1",5101,0.3147,0.0832,69.4
+"india | karnataka | urban","Q1",1924,0.193,0.0899,64.8
+"india | kerala | rural","Q1",1482,0.2273,0.0689,50.8
+"india | kerala | urban","Q1",987,0.1799,0.0696,49.9
+"india | madhya pradesh | rural","Q4",8775,0.4845,0.0922,80.5
+"india | madhya pradesh | urban","Q2",2206,0.2065,0.1166,76
+"india | maharashtra | rural","Q2",5840,0.3167,0.0975,75.1
+"india | maharashtra | urban","Q1",2608,0.1424,0.0775,62.2
+"india | manipur | rural","Q4",1347,0.3562,0.1164,68.9
+"india | meghalaya | rural","Q4",2528,0.4546,0.0954,62.4
+"india | mizoram | rural","Q2",1081,0.2641,0.1029,53.7
+"india | mizoram | urban","Q1",763,0.1166,0.0795,42.2
+"india | nagaland | rural","Q4",1807,0.3946,0.1074,62.6
+"india | nagaland | urban","Q2",700,0.198,0.0978,42.5
+"india | nct of delhi | urban","Q2",2484,0.1352,0.1135,57.2
+"india | odisha | rural","Q4",5737,0.502,0.1188,87.6
+"india | odisha | urban","Q2",1046,0.2798,0.1515,79
+"india | puducherry | urban","Q1",717,0.1311,0.0871,38.3
+"india | punjab | rural","Q1",3416,0.2441,0.0651,56
+"india | punjab | urban","Q2",1664,0.1443,0.0906,64.1
+"india | rajasthan | rural","Q4",8123,0.4566,0.095,77.2
+"india | rajasthan | urban","Q1",2356,0.1735,0.0825,62
+"india | tamil nadu | rural","Q1",3413,0.2957,0.0728,61.6
+"india | tamil nadu | urban","Q1",2492,0.1667,0.07,56.6
+"india | telangana | rural","Q1",4733,0.2787,0.0688,58.8
+"india | telangana | urban","Q2",1638,0.1795,0.0958,62.4
+"india | tripura | rural","Q4",1331,0.4182,0.0983,72.1
+"india | uttar pradesh | rural","Q3",16281,0.4305,0.0596,71.2
+"india | uttar pradesh | urban","Q1",3864,0.2143,0.0847,70.6
+"india | uttarakhand | rural","Q2",2143,0.3386,0.0985,68.5
+"india | west bengal | rural","Q4",3437,0.4814,0.0964,72.7
+"india | west bengal | urban","Q2",1524,0.2344,0.1197,70.7

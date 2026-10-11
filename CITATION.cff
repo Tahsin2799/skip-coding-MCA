@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this code or the skipMCA package, please cite the paper and this repository."
+title: "Coding questionnaire skips in composite health indices: code"
+abstract: >-
+  Code, summary results and the skipMCA R package for the paper "Coding
+  questionnaire skips in composite health indices: a plasmode simulation
+  study". The paper derives how much of a questionnaire filter each coding of a
+  skipped item carries into an index built by multiple correspondence analysis
+  and tests the theory in a plasmode simulation resampling covariates from four
+  Demographic and Health Surveys. No survey microdata are included.
+type: software
+authors:
+  - given-names: "A. F. M. Tahsin"
+    family-names: "Shahriar"
+    affiliation: "Institute of Applied Statistics and Data Science, University of Dhaka, Dhaka-1000, Bangladesh"
+    email: "tshahriar@isrt.ac.bd"
+    orcid: "https://orcid.org/0009-0003-0565-0803"
+license: MIT
+repository-code: "https://github.com/Tahsin2799/skip-coding-MCA"
+version: 1.0.0
+date-released: 2026-10-12
+keywords:
+  - multiple correspondence analysis
+  - skip pattern
+  - missing data
+  - composite index
+  - plasmode simulation
