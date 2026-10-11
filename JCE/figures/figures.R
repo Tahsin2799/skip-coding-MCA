@@ -243,3 +243,9 @@ p4 <- patchwork::wrap_plots(
   p4c, ncol = 1, heights = c(1, 1.15)) +
   patchwork::plot_annotation(tag_levels = "A")
 save_fig(p4, "fig4", 7.2, 7.6)
+
+# Figure S2: the imposed data-generating structure, laid out by Graphviz from
+# figS2_dag.dot (supplement A3).
+dag <- file.path(out, "figS2_dag.dot")
+stopifnot(system2("dot", c("-Tpdf", dag, "-o", file.path(out, "figS2.pdf"))) == 0,
+          system2("dot", c("-Tpng", "-Gdpi=300", dag, "-o", file.path(out, "figS2.png"))) == 0)
