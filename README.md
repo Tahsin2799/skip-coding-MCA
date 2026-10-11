@@ -40,7 +40,7 @@ in `CITATION.cff`.
 | `JCE/extensions/` | the three additional simulations of section 4.4 (advice loading, development size, development contact), with regularized iterative MCA, Firth-penalized item models and principal component indices; `README.md` is their runbook (post hoc) |
 | `JCE/analysis/review_analysis.R`, `test_review_analysis.R` | the documented reporting correction: recomputes the validation-targeting correlations with the specified separation exclusions, after checking every input against the production manifest, and its regression test |
 | `JCE/analysis/editor_review_checks.R` | the mechanism and item-model checks quoted in supplement A3 and A4 |
-| `JCE/figures/figures.R`, `JCE/supplement/supplement_tables.R`, `supplement_methods.md` | the manuscript's figures, supplementary tables and technical appendix text |
+| `JCE/figures/figures.R`, `figS2_dag.dot`, `JCE/supplement/supplement_tables.R`, `supplement_methods.md` | the manuscript's figures, the Graphviz source of Figure S2, the supplementary tables and the technical appendix text |
 | `skipMCA/` | the R package |
 | `outputs/methodology/production_v03_displays.rds`, `production_v03_claims.csv` | summary results of the production run: the displays the tables and figures use, and the 132 classified contrasts |
 | `JCE/analysis/review_analysis.rds`, `correlation_correction.csv`, `correlation_exclusions.csv` | results of the reporting correction |
@@ -53,7 +53,8 @@ R 4.5.2 with FactoMineR 2.13, dplyr 1.2.0, tidyr 1.3.2, tibble 3.3.1, digest
 0.6.39, cli 3.6.5 and haven 2.5.5, the versions the production run recorded in
 its manifest. matrixStats 1.5.0 is needed only to rebuild the quadrant
 membership, MASS for the rebuilt Josse et al. simulation, and ggplot2 4.0.2 and
-patchwork 1.3.2 for the figures. The additional simulations also need logistf
+patchwork 1.3.2 for the figures; Figure S2 is drawn by Graphviz (`dot`, tested
+with 16.1) from `JCE/figures/figS2_dag.dot`. The additional simulations also need logistf
 1.26.1 and testthat 3.3.2. Regularized iterative MCA needs missMDA 1.23, which
 requires FactoMineR 2.17; FactoMineR 2.17 moves the production MCA methods in
 the fifth or sixth decimal place, so keep 2.13 in the main library and install
@@ -203,6 +204,14 @@ Random numbers are seeded per purpose from the stream label and the
 configuration, so a rerun with the same code, packages and cache draws the
 same random numbers; floating-point results can still differ slightly across
 platforms.
+
+## Versions
+
+- 1.0.1 (12 October 2026): the supplementary tables and technical appendix
+  reworded for readability, with readable table labels and layout, and Figure
+  S2 drawn by Graphviz. No simulation, theory, extension or package code and no
+  result changed.
+- 1.0.0 (12 October 2026): first release.
 
 ## License
 

@@ -1,0 +1,31 @@
+// Figure S2: the imposed data-generating structure (supplement A3).
+// Rendered by JCE/figures/figures.R with Graphviz `dot`.
+digraph dag {
+  graph [rankdir=LR, nodesep=0.22, ranksep=0.38, fontname="Helvetica", bgcolor="white", pad=0.15];
+  node  [shape=box, style="rounded", fontname="Helvetica", fontsize=20, color="#52514e", margin="0.12,0.06"];
+  edge  [color="#52514e", arrowsize=1.1, penwidth=1.4, fontname="Helvetica", fontsize=16, fontcolor="#52514e"];
+
+  X   [label="Six covariates X"];
+  AGE [label="Age"];
+  SEX [label="Sex"];
+  U   [label="Cluster disease\neffect u"];
+  V   [label="Vulnerability V"];
+  L   [label="Cluster access\nsupply L"];
+  Y   [label="Disease Y"];
+  C   [label="Contact C"];
+  R   [label="Diagnosis R"];
+  A   [label="Factual advice A*"];
+  G   [label="Eligibility G"];
+  O   [label="Observed advice A"];
+
+  { rank=same; X; AGE; SEX; U; }
+
+  X -> V;
+  V -> Y; AGE -> Y; SEX -> Y; U -> Y;
+  V -> L; L -> C; V -> C;
+  C -> R; Y -> R; AGE -> R;
+  C -> A; R -> A; V -> A;
+  C -> G [style=dashed, label="contact filter"];
+  R -> G [style=dashed, label="diagnosis filter"];
+  G -> O; A -> O;
+}

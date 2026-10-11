@@ -31,8 +31,7 @@ new synthetic cluster identifier and new simulated variables. This is transport
 across simulated access levels within a pool, not training in one country and
 testing in another.
 
-Clusters are sampled with equal probability and replacement. The generator
-keeps the longest prefix of sampled whole clusters that fits the nominal size.
+Clusters are sampled with equal probability and replacement. The generator adds sampled clusters whole, in order, and stops before the one that would exceed the nominal size.
 If the first cluster alone exceeds that size, it is truncated. Consequently,
 the nominal development and target sizes are 1,000 and 20,000, but actual sizes
 usually fall slightly below them. The actual target size determines every
@@ -131,7 +130,7 @@ coefficients are design choices. Population-specific intercepts target roughly
 For each development or target draw, let \(Z_j\) be the standardized mean
 \(V\) of cluster \(j\). Cluster access supply is
 \(L_j=\rho Z_j+\sqrt{1-\rho^2}\eta_j\), where \(\eta_j\sim N(0,1)\) and
-\(\rho=-.25\). Finite draws need not have exactly this realized correlation.
+\(\rho=-.25\). A finite draw realizes this correlation only approximately.
 With independent \(e_{ij}\sim N(0,1)\), contact under setting \(s\) is
 
 \[
@@ -194,32 +193,15 @@ among eligible respondents. Contact, diagnosis and advice collapse different
 survey time windows into one simulated period. No intervention effect on disease
 or vulnerability is generated.
 
-The following diagram omits independent noise terms and empirical correlations
-among donor covariates. The arrow from cluster
-vulnerability to access supply represents the imposed inverse-care association.
-The two dashed eligibility arrows denote alternative filters.
+Figure S2 shows the imposed structure. It omits independent noise terms and
+empirical correlations among donor covariates. The arrow from vulnerability to
+cluster access supply represents the imposed inverse-care association, and the
+two dashed arrows into eligibility are the alternative filters.
 
-```mermaid
-flowchart LR
-  X[Six covariates] --> V[Vulnerability V]
-  V --> Y[Disease Y]
-  AGE[Age] --> Y
-  SEX[Sex] --> Y
-  U[Cluster disease effect] --> Y
-  V --> L[Cluster access supply]
-  L --> C[Contact C]
-  V --> C
-  C --> R[Diagnosis R]
-  Y --> R
-  AGE --> R
-  C --> A[Factual advice]
-  R --> A
-  V --> A
-  C -. contact filter .-> G[Eligibility G]
-  R -. diagnosis filter .-> G
-  G --> O[Observed advice]
-  A --> O
-```
+**Figure S2. The imposed data-generating structure.** The six covariates, age
+and sex are resampled from the surveys; every other node is simulated. Dashed
+arrows mark the two alternative filters that decide who is asked about advice.
+File: `JCE/figures/figS2.pdf`.
 
 The outcome intercepts for Q1, Q2, Q3, Q4, Bangladesh adults, India, Nepal,
 Albania and Bangladesh ages 18 to 49 are, respectively, −1.4018739424817,
@@ -272,16 +254,10 @@ an unseen covariate category is replaced by the modal category among eligible
 fitting respondents; the count of replacements is retained. Five sets of
 Bernoulli responses are drawn from fixed fitted probabilities, keeping observed
 responses. Parameter uncertainty and residual dependence between items are not
-propagated. Each completed development dataset yields an MCA axis, oriented and
-standardized on its development coordinates. Their standardized scores are
-averaged once per person before allocating resources. The adaptive variant
+propagated. Each completed development dataset yields an MCA axis, oriented and standardized on its development coordinates, and each person's five standardized scores are averaged into one before allocation. The adaptive variant
 refits item models in the target; both variants retain the development MCA axes.
 
-Under the diagnosis filter the development item models rest on few people. In
-the probe replicates of A3 they were fitted on 83 to 86 diagnosed respondents
-with 19 to 21 parameters and a smaller outcome class of 19 to 21, about one
-event per parameter, and R reported fitted probabilities of 0 or 1; under the
-contact filter, on about 490 respondents with about three events per parameter.
+Under the diagnosis filter the development item models rest on few people. In the probe replicates of A3 each was fitted on 83 to 86 diagnosed respondents. With 19 to 21 parameters and 19 to 21 people in the smaller outcome class, that is about one event per parameter, and R reported fitted probabilities of 0 or 1. Under the contact filter the models had about 490 respondents and about three events per parameter.
 In production, against dropping the items under the diagnosis filter, the mean
 differences in cluster rank correlation were −.087 for development models and
 −.055 for target models, the medians −.028 and −.009, and 23.9 and 14.4 percent
@@ -299,14 +275,12 @@ zero-coded advice, without age and sex in its score. Its development scores use
 five folds separated by synthetic cluster; a model fitted on all development
 rows scores the target. Age and sex enter the downstream tier validation models
 for every method. MCA and supervised projection leave target rows unscored if
-they contain categories absent from the relevant development fit. Subset MCA
-excludes not-asked categories while retaining full-data masses and uses the
-explicit projection implemented for that analysis.
+they contain categories absent from the relevant development fit. Subset MCA excludes the not-asked categories but keeps the full-data masses of the others. Its target rows are placed by the transition formula, because FactoMineR's `predict.MCA` ignores the exclusion.
 
 Individual budgets select the highest-scoring people up to
 \(\lfloor bN\rfloor\), for \(b=.05,.10,.20\). Unscoreable people are not
 selected. Cluster budgets select up to \(\lfloor .10J\rfloor\) clusters using
-the mean score of scored residents. Empty clusters are never selected; for
+the mean score of scored residents. Clusters with no scored resident are never selected; for
 whole-target rank correlation they tie below every scored cluster. Slots remain
 unfilled when too few people or clusters can be scored. Equal numbers of
 clusters need not mean equal numbers of residents or equal delivery costs.
@@ -465,13 +439,7 @@ squared correlation ratio, and \(C\) the Gram matrix of the two scores. Its
 leading value is a Rayleigh-Ritz lower bound for \(\lambda_1\), exact when the
 first axis lies in that span. The diagonal entries are
 \(Q^{-1}[P\lambda_X+\sum_{q\le k}\eta_q^2(h_X)]\) and
-\(Q^{-1}[k\lambda_A+\sum_{q>k}\eta_q^2(h_A)]\). When the blocks are weakly
-associated the cross terms are small and the leading direction follows the
-larger diagonal, which defines the inertia ratio \(\kappa=k\lambda_A/(P\lambda_X)\): each
-block's maximum axial inertia, the first eigenvalue of its separate analysis,
-times its number of items, which is what the block contributes along its own
-first axis in the joint analysis. The filtered block dominates as \(\kappa\)
-passes 1. Multiple factor analysis divides each group by its first
+\(Q^{-1}[k\lambda_A+\sum_{q>k}\eta_q^2(h_A)]\). The leading term of each diagonal entry, \(P\lambda_X\) or \(k\lambda_A\), is the block's number of items times its maximum axial inertia, the first eigenvalue of its separate analysis: what the block contributes along its own first axis in the joint analysis. When the blocks are weakly associated the cross terms are small and the leading direction follows the larger diagonal, so the filtered block dominates as the inertia ratio \(\kappa=k\lambda_A/(P\lambda_X)\) passes 1. Multiple factor analysis divides each group by its first
 eigenvalue so that no group dominates (Escofier and Pagès 1994); \(\kappa\) is
 the dominance an undivided filtered block exerts. By A6.3,
 \(k\lambda_A\ge\sum_{q\le k}\eta_q^2(s_G)\), so Theorem 1 bounds \(\kappa\) from below: missing single
@@ -525,8 +493,7 @@ items as a skipped one, which is why it selected up to .00002 rather than 0.
 **Proposition A6.7 (structural zeros and identification).** In the generator,
 factual advice is \(A^*_{ijk,s}=C_{ij,s}\cdot1[\cdot]\) (A3). Under the contact
 filter a skipped respondent has \(A^*=0\) with certainty, so the skip coded "no"
-reproduces factual advice exactly; the harm comes from the content, whose
-expectation given need depends on access. Under the diagnosis filter, contacted
+reproduces factual advice exactly; any harm comes from the item itself, since at a given need a person's chance of having been advised depends on their access. Under the diagnosis filter, contacted
 but undiagnosed respondents may have been advised, and observed advice comes
 only from the diagnosed, so their factual value is not identified from the
 observed data and every completion is an assumption. Missing fuzzy average
@@ -571,9 +538,7 @@ numbers below.
   replicate by replicate). Above \(\kappa=1\) the block took on average .99 of
   the axis under missing single, .74 under subset MCA and .86 under
   the skip coded "no"; the two pairs below 1 took .15 and .24 and lost −.005 and .000.
-- Instability: within-configuration replicate standard deviation of targeting
-  .12 and .16 for \(|\kappa-1|\) up to .15 and .30, against .08 and .06 beyond,
-  with mean eigengaps .036 and .038 against .099 and .195; Spearman correlation
+- Instability: the within-configuration replicate standard deviation of targeting was .12 for \(|\kappa-1|\) up to .15, .16 from .15 to .30, .08 from .30 to .60 and .06 above .60, with mean eigengaps .036, .038, .099 and .195 in the same bands; Spearman correlation
   between \(|\kappa-1|\) and the standard deviation −.64.
 - Budget below the share asked: in every diagnosis-filter cell whose diagnosed share exceeded the
   10% budget, the three codings selected 0 to .00001 of the people with
@@ -603,9 +568,8 @@ take up questions the production design left open: how informative the advice
 must be before imputing it helps, whether the imputers' losses under the
 diagnosis filter come from small item models, and whether the loss of the
 skip codings depends on the development sample's contact level or on the
-target's. All use the Pooled stratum Q3 reference scenario (\(r^2=.6\), no
-diagnosis age slope), a nominal target of 20,000 read at 20%, 50% and 80%
-contact, and 1,000 replicates per configuration.
+target's. All use the reference scenario of pooled stratum Q3 (\(r^2=.6\), no
+diagnosis age slope), a nominal target of 20,000 evaluated at 20%, 50% and 80% contact, and 1,000 replicates per configuration.
 
 | Study | Configurations | What varies |
 |---|---:|---|
@@ -684,8 +648,7 @@ and Figure 4.
   contact filter, as development contact went from 20% to 50% and 80%, subset
   MCA's inertia ratio fell from 1.93 to 1.20 and 1.09 and its filtered block
   still took .992, .706 and .742 of the first axis, but eligibility explained
-  .992, .625 and .002 of it, and its cluster rank correlation rose from .007 to
-  .042, to .434 to .520, and to .801 to .848. With 80% asked, the block keeps
+  .992, .625 and .002 of it, and its cluster rank correlation, over the three target contact levels, was .007 to .042, .434 to .520 and .801 to .848. With 80% asked, the block keeps
   \(1-p=.2\) of the filter (Theorem 1) and its axis follows the answers of
   those asked. Missing single kept \(\kappa=2.42\), eligibility explained .996
   of its axis at every level, and it stayed below .05. Under the diagnosis
@@ -693,8 +656,7 @@ and Figure 4.
   cluster eligibility and its correlation with need both rise with contact
   (A6.5), and this design does not separate the two.
 - *Principal component indices* (Table S14). The closed forms of A6.8 held in
-  all 16,000 development samples, to \(3\times10^{-13}\). With own indicators
-  the inertia ratio was 2.73 under the contact filter and 3.00 under the
+  all 16,000 development samples, to \(3\times10^{-13}\). With yes, no and skipped indicators, the counterpart of missing single, the inertia ratio was 2.73 under the contact filter and 3.00 under the
   diagnosis filter, eligibility explained .991 and .997 of the first
   component, and the index ranked communities at .019 to .050 and .302 to .304.
   With the skip coded 0 the ratio was .81 under the contact filter, where

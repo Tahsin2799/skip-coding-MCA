@@ -59,8 +59,10 @@ VARIANTS <- c(
 md_table <- function(d, digits = 3) {
   fmt <- function(x) {
     if (!is.numeric(x)) return(x)
-    out <- sub("^(-?)0\\.", "\\1.", formatC(round(x, digits) + 0, format = "f", digits = digits))
-    sub("^-(\\.0+)$", "\\1", out)
+    out <- formatC(round(x, digits) + 0, format = "f", digits = digits)
+    # Proportions drop the leading zero; percentages (one decimal) keep it.
+    if (digits >= 2) out <- sub("^(-?)0\\.", "\\1.", out)
+    sub("^-((0?)\\.0+)$", "\\1", out)
   }
   d <- as.data.frame(lapply(d, fmt), check.names = FALSE)
   c(paste0("| ", paste(names(d), collapse = " | "), " |"),
@@ -98,7 +100,7 @@ s2 <- chk |>
             `Leading method` = METHODS[lead],
             `Other method` = METHODS[other],
             Verdict = if_else(claim == "equivalent", "equivalent", "undecided"),
-            `Scenarios clearing 3 MCSE, of 72` = as.character(clear),
+            `Scenarios clearing 3 MCSE (of 72)` = as.character(clear),
             `Where the others sit` = where,
             `Difference where it clears` = size)
 
@@ -150,31 +152,37 @@ policy_table <- function(gate_name) {
               `Residents in selected clusters` = 100 * residents_in_selected_clusters,
               `Individual slots used` = 100 * individual_budget_used)
 }
-s6 <- review$exclusions |>
-  transmute(Metric = metric, `Flag applied` = validity_flag,
-            `Rows excluded` = as.character(flagged_rows),
-            `Finite values excluded` = as.character(finite_flagged_rows))
+big <- \(x) format(x, big.mark = ",", trim = TRUE)
 DISEASE_LABELS <- c(auc_index_scored = "AUC of the index", auc_model_scored = "AUC of the model",
                     log_or_top = "Top-tier odds ratio, development",
                     log_or_top_target = "Top-tier odds ratio, target",
                     beta_within = "Within-cluster slope", beta_between = "Between-cluster slope")
 TARGET_LABELS <- c(cluster_rho_all = "Cluster rank correlation", cl10_misalloc = "Inclusion error",
                    b10_hn_capture = "High-need share selected")
+FLAG_LABELS <- c(separation_target = "Separation in the target", separation_dev = "Separation in development")
+s6 <- review$exclusions |>
+  transmute(`Disease measure` = DISEASE_LABELS[metric], `Flag applied` = FLAG_LABELS[validity_flag],
+            `Rows excluded` = big(flagged_rows), `Finite values excluded` = big(finite_flagged_rows))
+stopifnot(!anyNA(s6$`Disease measure`), !anyNA(s6$`Flag applied`))
+POOL_LABELS <- c(Q1 = "Structural pool Q1", Q2 = "Structural pool Q2", Q3 = "Structural pool Q3",
+                 Q4 = "Structural pool Q4", bd_allage = "Bangladesh, 18 to 95", donor_india = "India",
+                 donor_nepal = "Nepal", donor_albania = "Albania", donor_bangladesh = "Bangladesh, 18 to 49")
+COUNTRY <- c(india = "India", nepal = "Nepal", albania = "Albania", bangladesh = "Bangladesh")
 s7 <- review$method_mean_sensitivity |>
   transmute(`Disease measure` = DISEASE_LABELS[a], `Targeting measure` = TARGET_LABELS[t],
             `Scenarios` = as.character(cells), Median = median_rho,
             Minimum = min_rho, Maximum = max_rho)
 s8a <- review$donor_counts |>
-  transmute(Pool = population, People = as.character(people),
-            Clusters = as.character(clusters),
+  transmute(Pool = POOL_LABELS[population], People = big(people),
+            Clusters = big(clusters),
             Ages = paste(min_age, max_age, sep = " to "),
-            Women = as.character(women), Men = as.character(men))
+            Women = big(women), Men = big(men))
 s8b <- review$donor_flow |>
-  transmute(Donor = donor, `Age-eligible records, 18 to 49` = as.character(age_eligible),
-            `Complete on six inputs` = as.character(six_inputs_complete))
+  transmute(Survey = COUNTRY[donor], `Age-eligible records, 18 to 49` = big(age_eligible),
+            `Complete on six inputs` = big(six_inputs_complete))
 s8c <- review$pool_composition |>
   filter(population %in% c("Q1", "Q2", "Q3", "Q4")) |>
-  transmute(Pool = population, Donor = donor, People = as.character(people))
+  transmute(Pool = POOL_LABELS[population], Survey = COUNTRY[donor], People = big(people))
 
 # S9: rank of each method on cluster rank correlation over the 45 combinations of
 # population, filter and contact level at the reference scenario.
@@ -258,10 +266,10 @@ s12 <- ext$devsize |>
   left_join(ext$devsize_models, by = "n_dev") |>
   arrange(n_dev, match(arm, names(EXT_METHODS))) |>
   transmute(`Development sample` = format(n_dev, big.mark = ","),
-            `Eligible in development` = ext_num(dev_eligible, 0),
-            `Events per item-model parameter` = ext_num(events_per_parameter, 1),
+            `Diagnosed in development` = ext_num(dev_eligible, 0),
+            `Events per parameter` = ext_num(events_per_parameter, 1),
             Method = EXT_METHODS[arm], `Rank correlation` = mean, `Difference from dropping` = diff,
-            `Median difference` = median_diff, `Share behind by more than .10` = behind_10,
+            `Median difference` = median_diff, `Share trailing by more than .10` = behind_10,
             MCSE = ext_num(mcse, 4))
 s12_drop <- ext$devsize |> filter(arm == "fuzzy_average") |> transmute(n_dev, drop = mean - diff)
 
@@ -293,7 +301,7 @@ s14 <-tidyr::expand_grid(gate = names(GATE_LABEL), coding = names(PCA_LABEL)) |>
   left_join(pca_rho |> select(gate, pca_arm = arm, pca = range), by = c("gate", "pca_arm")) |>
   left_join(pca_rho |> select(gate, mca_arm = arm, mca = range), by = c("gate", "mca_arm")) |>
   transmute(Filter = GATE_LABEL[gate], Coding = PCA_LABEL[coding],
-            `Largest gap from the closed form` = if_else(is.na(max_formula_diff), "",
+            `Gap from closed form` = if_else(is.na(max_formula_diff), "",
                                                          formatC(max_formula_diff, format = "e", digits = 0)),
             `Squared correlation with eligibility` = if_else(is.na(eta2), "", ext_num(eta2)),
             `Inertia ratio` = if_else(is.na(inertia_ratio), "", ext_num(inertia_ratio, 2)),
@@ -306,16 +314,16 @@ lines <- c(
   "# Supplementary material",
   "",
   "*Coding questionnaire skips in composite health indices: a plasmode simulation study.*",
-  "Generated by `JCE/supplement/supplement_tables.R` from production summaries, the documented reporting correction and the post hoc production-linked theory summary; technical text, including the proofs (A6), from `JCE/supplement/supplement_methods.md`.",
+  "A. F. M. Tahsin Shahriar and Nasrin Lipi. Code and the summary results behind every table and figure: https://doi.org/10.5281/zenodo.23303798 (all versions).",
   "",
   "## Table S1. Design grid, 52 configurations",
   "",
   "| Block | Configurations | What varies |",
   "|---|---:|---|",
-  "| Core | 24 | two populations (Pooled stratum Q3 high in deprivation and low in coherence, ages 18 to 49; Bangladesh 2017-18, ages 18 to 95) x *r²* .4, .6, .8 x age slope of diagnosis 0, .5 x contact and diagnosis filters; each read at 20, 50 and 80% contact, 72 scenarios |",
-  "| One-at-a-time variations | 13 | around the reference scenario (Pooled stratum Q3, *r²* .6, no age slope, contact filter): diagnosis given disease .20 and .80 (also under the diagnosis filter), false-positive diagnosis .15, access unrelated to deprivation, access correlation -.5, no between-cluster spread in access, two and eight advice items, equal loadings, a development sample of 500, twenty imputations |",
+  "| Core | 24 | two populations (pooled stratum Q3, with high deprivation and weakly associated inputs, ages 18 to 49; Bangladesh 2017-18, ages 18 to 95) x *r²* .4, .6, .8 x age slope of diagnosis 0, .5 x contact and diagnosis filters; each evaluated at 20, 50 and 80% contact, 72 scenarios |",
+  "| One-at-a-time variations | 13 | around the reference scenario (pooled stratum Q3, *r²* .6, no age slope, contact filter): diagnosis given disease .20 and .80 (also under the diagnosis filter), false-positive diagnosis .15, access unrelated to deprivation, access correlation -.5, no between-cluster spread in access, two and eight advice items, equal loadings, a development sample of 500, twenty imputations |",
   "| Mechanism checks | 4 | diagnosis unrelated to disease; four always-observed proxies in place of the advice items; advice strongly informative about need; a monotone BMI truth |",
-  "| Other structural strata | 3 | the three remaining cells of deprivation level against coherence, at the reference scenario |",
+  "| Other structural strata | 3 | the three remaining cells of deprivation level against input association (coherence, A1), at the reference scenario |",
   "| Country pools | 8 | India, Nepal, Albania and Bangladesh at 18 to 49 x both filters, at the reference scenario |",
   "",
   "Every configuration: 1,000 replicates, nominal development size 1,000 at 50% contact (500 in one variation), nominal target size 20,000. Production (23 to 25 September 2026) completed all 1,000 replicates of every configuration with no failed replicate; realized contact and prevalence were within .002 of target, and 31,200 metrics recomputed in base R from the saved row-level artifacts of 104 replicates matched the stored values exactly. Whole-cluster sampling usually produces slightly fewer people; the actual target N sets every budget and denominator. After production, every replicate of all 52 configurations was regenerated from its seeds to compute the theory diagnostics and to score missing fuzzy average (A6.9); these results are post hoc.",
@@ -334,7 +342,7 @@ lines <- c(
   "",
   "## Table S3b. Change in cluster rank correlation from 20% to 80% contact",
   "",
-  "Methods that read no filtered item (Oracle, Count, Dropped) cannot change and read exactly zero.",
+  "Methods that read no filtered item (Oracle, Count, Dropped) cannot change, so their change is exactly zero.",
   "",
   md_table(s3b),
   "",
@@ -394,12 +402,12 @@ lines <- c(
   "", md_table(s11), "",
   "## Table S12. Development sample size under the diagnosis filter (post hoc)",
   "",
-  sprintf("Advice loading .25, development at 50%% contact; 1,000 replicates per size, 3,000 paired values per row over the three target contact levels. Differences are from dropping the items, which read %s, %s and %s at 1,000, 2,000 and 4,000. Events per parameter is the smaller outcome class over the number of coefficients, averaged over the four item models. Samples of 2,000 and 4,000 draw their own seed streams. Figure 4B plots the differences.",
+  sprintf("Advice loading .25, development at 50%% contact; 1,000 replicates per size, 3,000 paired values per row over the three target contact levels. Differences are from dropping the items, which scored %s, %s and %s at 1,000, 2,000 and 4,000. Events per parameter is the smaller outcome class over the number of coefficients, averaged over the four item models; under the diagnosis filter the people asked are the diagnosed. Samples of 2,000 and 4,000 draw their own seed streams. Figure 4B plots the differences.",
           ext_num(s12_drop$drop[1]), ext_num(s12_drop$drop[2]), ext_num(s12_drop$drop[3])),
   "", md_table(s12), "",
   "## Table S13. Development contact against target contact (post hoc)",
   "",
-  sprintf("Advice loading .25, development sample of 1,000 at 20, 50 or 80%% contact, target read at 20, 50 and 80%%. The share asked, the inertia ratio and the R² of the first axis with the filtered block's own axis and with eligibility come from development data. Means over 1,000 replicates; Monte Carlo standard errors at most %s. Dropping the items read %s in every cell. Missing single, subset MCA and the skip coded \"no\" ranked worst at 50%% target contact in %d of the 18 combinations of filter, coding and development contact. Figure 4C plots the three codings.",
+  sprintf("Advice loading .25, development sample of 1,000 at 20, 50 or 80%% contact, target evaluated at 20, 50 and 80%%. The share asked, the inertia ratio and the R² of the first axis with the filtered block's own axis and with eligibility come from development data. Means over 1,000 replicates; Monte Carlo standard errors at most %s. Dropping the items scored %s in every cell. Missing single, subset MCA and the skip coded \"no\" ranked worst at 50%% target contact in %d of the 18 combinations of filter, coding and development contact. Figure 4C plots the three codings.",
           ext_num(max(ext$devcontact$mcse), 4),
           ext_num(mean(ext$devcontact$rho[ext$devcontact$arm == "drop_items"])), worst_at_50),
   "", md_table(s13), "",
