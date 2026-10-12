@@ -84,7 +84,7 @@ services, 16/21/22/23/31 to manual, and 12/13/14/15 to agriculture.
 The count is the sum of six binary indicators, ranging from 0 to 6 before the
 shared orientation step. Water, sanitation, fuel and schooling adapt the global
 MPI definitions (Alkire, Kanagaratnam and Suppa, 2018), rather than reproducing
-the full household MPI: travel time for water is not used, education is
+the full household MPI. Travel time for water is not used, education is
 individual, and the combined kerosene/coal rung is counted as deprived. BMI
 uses the WHO category thresholds (WHO, 2000), with underweight and obesity
 flagged but overweight unflagged. The work indicator is a study design choice.
@@ -143,7 +143,7 @@ The baseline contact intercepts are −1.5831718277591, .0030644116036 and
 was calibrated against a Nepal contact proxy; its value and the -.25 design
 correlation are not direct estimates of these latent mechanisms. The individual
 term \(.3V_{ij}\) pushes the other way, so the reference design is nearly
-access-neutral at cluster level: in probe replicates (25 per cell, Q3 and
+access-neutral at cluster level. In probe replicates (25 per cell, Q3 and
 Bangladesh 18 to 95 at \(r^2=.6\), `JCE/analysis/editor_review_checks.R`), the
 cluster-level Spearman correlation between contact rate and mean \(V\) was
 −.04 to −.05 in Q3 and −.02 in Bangladesh 18 to 95 at every contact level.
@@ -186,7 +186,7 @@ filter is a structural zero, and coding it as "no" reproduces factual advice
 receipt. Under the diagnosis filter, contacted but undiagnosed respondents can
 have \(A^*_{ijk,s}=1\), so the same coding misreads them.
 
-The odds ratio of 16 for advice given diagnosis and the advice loading .25 are
+The odds ratio of 16 relating diagnosis to advice and the advice loading .25 are
 design choices. The motivating survey cannot estimate that contrast because it
 does not ask undiagnosed people about advice. There is no ordinary item nonresponse
 among eligible respondents. Contact, diagnosis and advice collapse different
@@ -208,10 +208,10 @@ Albania and Bangladesh ages 18 to 49 are, respectively, −1.4018739424817,
 −1.3874000585407, −1.3979337882166, −1.3897578168946, −1.5156911575790,
 −1.3925435620646, −1.3550533785203, −1.3936592700210 and −1.3962307474406.
 
-Stress settings replace one parameter at a time: diagnosis given disease .20 or
-.80; false-positive diagnosis .15; access correlation 0 or −.5; access coefficient 0;
-two or eight advice items; all six loadings .65; nominal development size 500;
-or 20 imputations. Two-item advice uses the first two baseline probabilities;
+The stress settings each replace one parameter. They are diagnosis given disease
+.20 or .80; false-positive diagnosis .15; access correlation 0 or −.5; access
+coefficient 0; two or eight advice items; all six loadings .65; nominal
+development size 500; and 20 imputations. Two-item advice uses the first two baseline probabilities;
 eight-item advice repeats the four-item vector twice. The low and high
 diagnosis settings are also run under the diagnosis filter. Other stress
 settings and all mechanism checks use the contact filter at the Q3 reference
@@ -254,7 +254,7 @@ an unseen covariate category is replaced by the modal category among eligible
 fitting respondents; the count of replacements is retained. Five sets of
 Bernoulli responses are drawn from fixed fitted probabilities, keeping observed
 responses. Parameter uncertainty and residual dependence between items are not
-propagated. Each completed development dataset yields an MCA axis, oriented and standardized on its development coordinates, and each person's five standardized scores are averaged into one before allocation. The adaptive variant
+propagated. Each completed development dataset yields an MCA axis, oriented and standardized on its development coordinates, and each person's five standardized scores are averaged into one before allocation. The target-model variant
 refits item models in the target; both variants retain the development MCA axes.
 
 Under the diagnosis filter the development item models rest on few people. In the probe replicates of A3 each was fitted on 83 to 86 diagnosed respondents. With 19 to 21 parameters and 19 to 21 people in the smaller outcome class, that is about one event per parameter, and R reported fitted probabilities of 0 or 1. Under the contact filter the models had about 490 respondents and about three events per parameter.
@@ -262,7 +262,7 @@ In production, against dropping the items under the diagnosis filter, the mean
 differences in cluster rank correlation were −.087 for development models and
 −.055 for target models, the medians −.028 and −.009, and 23.9 and 14.4 percent
 of replicates trailed by more than .10. The mean deficit comes from a tail of
-failures; the typical target-model replicate was within .01 of dropping.
+replicates with large deficits; the typical target-model replicate was within .01 of dropping.
 
 Disease measures are the development and target top-tier odds ratios, the
 development within-cluster and between-cluster slopes, and the target AUCs of
@@ -331,22 +331,23 @@ on 23 to 25 September 2026. Proposed margins were confirmed unchanged on
 preregistration.
 
 The separate 100-replicate sizing pilot projected 124 of the 132 targeting
-contrasts to receive a verdict at 1,000 replicates, with no further gain at
+contrasts to be decided at 1,000 replicates, with no further gain at
 2,000. This projection used the pilot's paired spreads and held its mean
 differences fixed. Pilot results are not pooled with production, which used a
-different random stream and manifest. The observed production verdict count
-was 122, including one equivalence.
+different random stream and manifest. In production 122 were
+decided, including one equivalence.
 
-### A6. Theory: proofs and verification
+### A6. Proofs and verification of the theory
 
 The theory, its tests and missing fuzzy average were derived after
 production and are post hoc. They change no prespecified verdict.
 
-**Notation.** *n* respondents and *Q* = *P* + *k* categorical items: substantive
-items \(X_1,\dots,X_P\) and filtered items \(A_1,\dots,A_k\), all asked of the
-same eligible respondents, \(G_i=1\), with \(p=\bar G\). A coding turns item
-*q* into indicator columns \(z_j\), \(j\in J_q\): eligible respondents receive
-the crisp indicator of their answer and a skipped respondent receives a profile
+**Notation.** There are *n* respondents and *Q* = *P* + *k* categorical items,
+the substantive items \(X_1,\dots,X_P\) and the filtered items
+\(A_1,\dots,A_k\). The filtered items are all asked of the same eligible
+respondents, \(G_i=1\), with \(p=\bar G\). A coding turns item
+*q* into indicator columns \(z_j\), \(j\in J_q\). Eligible respondents receive
+the crisp indicator of their answer, and a skipped respondent receives a profile
 \(v_i\) over \(J_q\), crisp or fuzzy. Subset analysis keeps a set \(S\) of
 analysed columns with their full-data masses. Write \(n_j=\sum_i z_{ij}\),
 \(f_j=n_j/n\), \(f_{j\mid G}\) for the answer distribution among the eligible
@@ -386,28 +387,28 @@ the mean-square contingency between eligibility and the coded item.
 **Corollary A6.1 (the codings).** For a binary item that the eligible answer
 "yes" with probability \(\pi\):
 
-(a) Missing single, the skip as its own category, \(\bar v=(0,0,1)\) on (no, yes, skip):
-\(\eta_q^2(s_G)=p(1-p)\,[(1-\pi)/p+\pi/p+1/(1-p)]=1\), whatever the number of answer
+(a) Missing single, the skip as its own category, with \(\bar v=(0,0,1)\) on (no, yes,
+skip), gives \(\eta_q^2(s_G)=p(1-p)\,[(1-\pi)/p+\pi/p+1/(1-p)]=1\), whatever the number of answer
 categories.
 
-(b) Subset MCA, the skip column excluded:
+(b) Subset MCA, with the skip column excluded, gives
 \(\eta_q^2(s_G)=p(1-p)\,[(1-\pi)/p+\pi/p]=1-p\). Subset MCA gives the same solution as
 missing passive modified margin (Josse et al. 2012), so modified margin keeps
 \(1-p\) as well. The "multiple" variant of subset MCA for incomplete data, with
 one missing category per cell, has the same analysed columns and the same
 value.
 
-(c) Skip coded "no", \(\bar v=(1,0)\): \(f_{\text{no}}=1-p\pi\),
-\(f_{\text{yes}}=p\pi\), and
+(c) The skip coded "no", with \(\bar v=(1,0)\), has \(f_{\text{no}}=1-p\pi\) and
+\(f_{\text{yes}}=p\pi\), so
 \(\eta_q^2(s_G)=p(1-p)\,[\pi^2/(1-p\pi)+\pi/p]=\pi(1-p)/(1-p\pi)\). It is below the
 subset value exactly when \(\pi<1/(1+p)\).
 
-(d) Missing fuzzy average, \(\bar v=f_{\cdot\mid G}\): \(\eta_q^2(s_G)=0\). Since every
+(d) Missing fuzzy average, with \(\bar v=f_{\cdot\mid G}\), gives \(\eta_q^2(s_G)=0\). Since every
 term of Theorem 1 is non-negative, \(\eta_q^2(s_G)=0\) if and only if
 \(\bar v_j=f_{j\mid G}\) for every analysed column with \(f_j>0\). Among codings
 that analyse every column, it is the only mean profile that carries no filter.
 
-(e) Imputation: \(\bar v\) is the mean imputed profile, and \(\eta_q^2(s_G)\) is near 0
+(e) Under imputation, \(\bar v\) is the mean imputed profile, and \(\eta_q^2(s_G)\) is near 0
 when that profile is near the answers of those asked.
 
 **Corollary A6.2 (a bound under missing fuzzy average).** Under missing fuzzy average,
@@ -426,7 +427,7 @@ the corollary bounds the inertia it leaves to the items.
 \(\lambda_1\ge\lambda(s_G)=Q^{-1}\sum_{q}\eta_q^2(s_G)\ge
 Q^{-1}\sum_{q\le k}\eta_q^2(s_G)\), indexing the filtered items first. Under missing
 single, \(\lambda_1\ge k/Q\), and the filtered block analysed alone
-has eigenvalue exactly 1: the filter is an exact dimension. In the core design
+has eigenvalue exactly 1, so the filter is an exact dimension. In the core design
 \(k/Q=.40\); in probe replicates the first eigenvalue was .404 to .407, with an
 axis correlating .995 to .998 with eligibility.
 
@@ -439,11 +440,12 @@ squared correlation ratio, and \(C\) the Gram matrix of the two scores. Its
 leading value is a Rayleigh-Ritz lower bound for \(\lambda_1\), exact when the
 first axis lies in that span. The diagonal entries are
 \(Q^{-1}[P\lambda_X+\sum_{q\le k}\eta_q^2(h_X)]\) and
-\(Q^{-1}[k\lambda_A+\sum_{q>k}\eta_q^2(h_A)]\). The leading term of each diagonal entry, \(P\lambda_X\) or \(k\lambda_A\), is the block's number of items times its maximum axial inertia, the first eigenvalue of its separate analysis: what the block contributes along its own first axis in the joint analysis. When the blocks are weakly associated the cross terms are small and the leading direction follows the larger diagonal, so the filtered block dominates as the inertia ratio \(\kappa=k\lambda_A/(P\lambda_X)\) passes 1. Multiple factor analysis divides each group by its first
-eigenvalue so that no group dominates (Escofier and Pagès 1994); \(\kappa\) is
-the dominance an undivided filtered block exerts. By A6.3,
-\(k\lambda_A\ge\sum_{q\le k}\eta_q^2(s_G)\), so Theorem 1 bounds \(\kappa\) from below: missing single
-\(\kappa\ge k/(P\lambda_X)\), subset MCA \(\kappa\ge k(1-p)/(P\lambda_X)\).
+\(Q^{-1}[k\lambda_A+\sum_{q>k}\eta_q^2(h_A)]\). The leading term of each diagonal entry, \(P\lambda_X\) or \(k\lambda_A\), is the block's number of items times its maximum axial inertia, the first eigenvalue of its separate analysis. It is what the block contributes along its own first axis in the joint analysis. When the blocks are weakly associated the cross terms are small and the leading direction follows the larger diagonal, so the filtered block dominates as the inertia ratio \(\kappa=k\lambda_A/(P\lambda_X)\) passes 1. Multiple factor analysis divides each group by its first
+eigenvalue so that no group dominates (Escofier and Pagès 1994); \(\kappa\)
+measures the dominance an undivided filtered block exerts. By A6.3,
+\(k\lambda_A\ge\sum_{q\le k}\eta_q^2(s_G)\), so Theorem 1 bounds \(\kappa\) from below, with
+\(\kappa\ge k/(P\lambda_X)\) under missing single and
+\(\kappa\ge k(1-p)/(P\lambda_X)\) under subset MCA.
 For binary items, \(k\lambda_A\) is the largest eigenvalue of their correlation
 matrix, at least \(1+(k-1)\bar r\). In probe replicates with
 \(|\kappa-1|>.25\), the span of \(\{h_X,h_A\}\) explained a median .997 of
@@ -468,16 +470,21 @@ true cluster need and \(r\) between them,
 \]
 
 exact for the Pearson correlation of cluster means when the remainder is zero.
-As \(\beta/\alpha\to\infty\), \(\tau\to\rho_A\). When the filtered block dominates, \(h_A\) is close to
-eligibility, so the index ranks communities as well as the cluster
-eligibility rate does. The weights are fixed in development, but \(\sigma_A\) is
+As \(\beta/\alpha\to\infty\), \(\tau\to\rho_A\). When the filtered block dominates and carries most of the filter (missing
+single, or subset MCA with few people asked), \(h_A\) is close to eligibility,
+and as \(\beta\sigma_A\) outgrows \(\alpha\sigma_X\) the index ranks communities
+as the cluster eligibility rate does. A block can dominate without carrying
+much of the filter, as subset MCA does when developed at 80% contact (A7). The weights are fixed in development, but \(\sigma_A\) is
 a property of the target. If cluster eligibility rates vary with logit-scale
 variance \(\sigma_L^2\) around *p*, the delta method and binomial sampling within
 clusters of mean size \(\bar n\) give
 \(\sigma_A^2\approx[p(1-p)]^2\sigma_L^2+p(1-p)/\bar n\), largest at
 \(p=\tfrac12\). Under the contact filter the target's *p* is its contact rate,
 so the filter's pull peaks at 50% contact. Under the diagnosis filter *p* stays
-below one half, and both \(\sigma_A\) and \(\rho_A\) rise with contact. In probe
+below one half, and both \(\sigma_A\) and \(\rho_A\) rise with contact. With few
+people eligible, \(\sigma_A\) is small and the substantive part still orders
+many clusters, so the index can rank them better than the eligibility rate
+does (A6.11). In probe
 replicates, the development-time two-direction reduction predicted target
 cluster targeting with r = .94 and mean absolute error .039 where
 \(|\kappa-1|>.25\).
@@ -497,8 +504,8 @@ reproduces factual advice exactly; any harm comes from the item itself, since at
 but undiagnosed respondents may have been advised, and observed advice comes
 only from the diagnosed, so their factual value is not identified from the
 observed data and every completion is an assumption. Missing fuzzy average
-assigns no factual value: an item informs the index only through differences
-among those asked.
+assigns no factual value. An item then informs the index only through
+differences among those asked.
 
 **A6.8 Principal component indices.** For binary items analysed by principal
 components of their correlation matrix, the first eigenvalue is
@@ -530,22 +537,22 @@ with filtered items) took 2 hours 51 minutes on six workers on 8 October 2026;
 `JCE/theory/theory_link_summary.R` produces Table 2, Figure 1, Table S10 and the
 numbers below.
 
-- Theorem 1: maximum difference between the empirical value and the formula
-  over 204,000 coding-by-replicate rows, \(6\times10^{-15}\); the skip coded "no"
-  carried less filter than subset MCA in 51,000 of 51,000 replicates.
-- Inertia ratio: over 153 configuration-coding pairs, Spearman correlation
-  with the loss against dropping the items .83 (.88 for the block R², .79
+- *Theorem 1.* The maximum difference between the empirical value and the
+  formula over 204,000 coding-by-replicate rows was \(6\times10^{-15}\), and the
+  skip coded "no" carried less filter than subset MCA in 51,000 of 51,000 replicates.
+- *Inertia ratio.* Over 153 configuration-coding pairs, its Spearman
+  correlation with the loss against dropping the items was .83 (.88 for the block R², .79
   replicate by replicate). Above \(\kappa=1\) the block took on average .99 of
   the axis under missing single, .74 under subset MCA and .86 under
   the skip coded "no"; the two pairs below 1 took .15 and .24 and lost −.005 and .000.
-- Instability: the within-configuration replicate standard deviation of targeting was .12 for \(|\kappa-1|\) up to .15, .16 from .15 to .30, .08 from .30 to .60 and .06 above .60, with mean eigengaps .036, .038, .099 and .195 in the same bands; Spearman correlation
-  between \(|\kappa-1|\) and the standard deviation −.64.
-- Budget below the share asked: in every diagnosis-filter cell whose diagnosed share exceeded the
+- *Instability.* The within-configuration replicate standard deviation of targeting was .12 for \(|\kappa-1|\) up to .15, .16 from .15 to .30, .08 from .30 to .60 and .06 above .60, with mean eigengaps .036, .038, .099 and .195 in the same bands. The Spearman
+  correlation between \(|\kappa-1|\) and the standard deviation was −.64.
+- *Budget below the share asked.* In every diagnosis-filter cell whose diagnosed share exceeded the
   10% budget, the three codings selected 0 to .00001 of the people with
   undiagnosed disease, against .17 for dropping the items; below the budget
   they selected .03 to .12.
-- Corollary A6.2, on probe replicates (`JCE/theory/theory_checks.R`, 12 per
-  cell): the fuzzy-average block eigenvalue reached at most .64 of *p* in all 12
+- *Corollary A6.2.* On probe replicates (`JCE/theory/theory_checks.R`, 12 per
+  cell), the fuzzy-average block eigenvalue reached at most .64 of *p* in all 12
   settings, and its inertia ratio was .40 to .63 under the contact filter (.89
   with eight items) and .03 to .09 under the diagnosis filter.
 
@@ -555,17 +562,32 @@ variables 1 to 3 together and 60 miss variables 9 and 10 together, without a
 stated reason. Theorem 1 gives modified margin a squared correlation ratio with the missingness pattern of .6 per item
 there and missing fuzzy average zero. `JCE/theory/josse2012_check.R` rebuilds
 the design with 500 replications per cell and reproduces all six published
-medians of the modified RV coefficient within .01: missing single .30 and .45,
-modified margin .42 and .71, missing fuzzy average .77 and .91, for weak and
-strong structure. The missingness indicators explained .50, .48 and .01 of the
+medians of the modified RV coefficient within .01. For weak and strong
+structure they are .30 and .45 for missing single, .42 and .71 for modified
+margin, and .77 and .91 for missing fuzzy average. The missingness indicators explained .50, .48 and .01 of the
 three methods' first two axes under weak structure, and .50, .23 and .01 under
 strong structure. The collapse is the missingness pattern dominating the first axes.
+
+**A6.11 Cluster ranking under a dominant filter.** Production saved person-level
+data for two replicates of every configuration, 24 per filter in the core
+design; `JCE/analysis/filter_ranking_check.R` reads them. Under the contact
+filter missing single ranked clusters about as the cluster contact rate did.
+Their mean Spearman correlations with cluster need were .04 and −.04 at 20%
+contact, .02 and −.03 at 50% and .05 and −.03 at 80%. Under the diagnosis
+filter missing single ranked clusters better than the diagnosis rate, at .41,
+.33 and .36 against .10, .18 and .25. Only 4%, 9% and 14% of the target were
+eligible, so eligibility varied little between clusters (A6.5), and 54%, 23%
+and 10% of clusters had no diagnosed resident. Among those clusters the rest
+of the score still ordered need, with a correlation of about .83 at every
+contact level. At 80% contact under the diagnosis filter, everyone that
+missing single, subset MCA and the skip coded "no" selected at the 10%
+individual budget had been diagnosed, against .22 for dropping the items.
 
 ### A7. Additional simulations (post hoc)
 
 Three studies, designed after the theory and run on 10 and 11 October 2026,
-take up questions the production design left open: how informative the advice
-must be before imputing it helps, whether the imputers' losses under the
+take up three questions the production design left open. They ask how
+informative the advice must be before imputing it helps, whether the imputers' losses under the
 diagnosis filter come from small item models, and whether the loss of the
 skip codings depends on the development sample's contact level or on the
 target's. All use the reference scenario of pooled stratum Q3 (\(r^2=.6\), no
@@ -581,7 +603,7 @@ Configurations with a development sample of 1,000 reuse the production seed
 stream of the reference configuration, so the people and the uniforms are the
 same in every one of them and only the advice, or the development sample's
 contact, changes. At loading .25 and 50% development contact the configuration
-is production itself: over all 1,000 replicates under both filters, the ten
+is production itself. Over all 1,000 replicates under both filters, the ten
 production methods reproduced the saved production metrics exactly (60,000
 rows, 81 metrics, largest difference 0). The larger development samples draw
 their own streams.
@@ -590,12 +612,12 @@ Every configuration scores the ten production methods and missing fuzzy
 average (A6.9), and four further kinds of index.
 
 - *Imputation with FLIC item models*, under the diagnosis filter only, where
-  the development item models rest on about 84 diagnosed respondents: each
+  the development item models rest on about 84 diagnosed respondents. Each
   item model's slopes are estimated by Firth's penalized likelihood and its
   intercept is then re-estimated so that the mean predicted probability equals
   the observed rate (Puhr et al. 2017; `logistf` 1.26.1). Development and
   target models are used as in the production imputers.
-- *Regularized iterative MCA* (Josse et al. 2012): the skipped cells of the
+- *Regularized iterative MCA* (Josse et al. 2012). The skipped cells of the
   indicator matrix are imputed by a regularized reconstruction of rank two
   (`missMDA` 1.23, `imputeMCA`), and the index is the first axis of the MCA of
   the completed fuzzy indicator matrix. The target is imputed on its own data
@@ -613,7 +635,7 @@ average (A6.9), and four further kinds of index.
 
 The two passes took 17.3 and 7.9 hours of computation on six workers in 640
 chunks of 50 replicates, with no chunk error. Of 822,000 method rows, 18
-failed: both FLIC methods in 3 of 1,000 replicates with 20% development
+failed. They were both FLIC methods in 3 of 1,000 replicates with 20% development
 contact under the diagnosis filter, where development held 27 to 31 diagnosed
 respondents for 17 to 20 coefficients per item model and the penalized fit
 stopped on an information matrix that was not positive definite. No table uses
@@ -644,7 +666,7 @@ and Figure 4.
   the skip coded "no" ranked worst at 50% target contact in 17 of the 18
   combinations of filter, coding and development contact; the exception,
   subset MCA developed at 80% contact under the contact filter, fell from .848
-  to .801 as target contact rose. Development contact set the level. Under the
+  to .801 as target contact rose. The development sample's contact level, more than the target's, set how well these codings ranked clusters. Under the
   contact filter, as development contact went from 20% to 50% and 80%, subset
   MCA's inertia ratio fell from 1.93 to 1.20 and 1.09 and its filtered block
   still took .992, .706 and .742 of the first axis, but eligibility explained
@@ -658,10 +680,11 @@ and Figure 4.
 - *Principal component indices* (Table S14). The closed forms of A6.8 held in
   all 16,000 development samples, to \(3\times10^{-13}\). With yes, no and skipped indicators, the counterpart of missing single, the inertia ratio was 2.73 under the contact filter and 3.00 under the
   diagnosis filter, eligibility explained .991 and .997 of the first
-  component, and the index ranked communities at .019 to .050 and .302 to .304.
+  component, and the index's cluster rank correlation was .019 to .050 and .302
+  to .304.
   With the skip coded 0 the ratio was .81 under the contact filter, where
-  eligibility explained .058 and the index ranked at .865 to .894, against .862
+  eligibility explained .058 and the index reached .865 to .894, against .862
   for dropping the items, and 1.13 under the diagnosis filter, where
-  eligibility explained .678 and the index ranked at .744 to .757. Mean
-  imputation has zero squared correlation with eligibility and ranked at .866
+  eligibility explained .678 and the index reached .744 to .757. Mean
+  imputation has zero squared correlation with eligibility and reached .866
   to .905 and .861 to .873.

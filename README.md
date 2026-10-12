@@ -40,6 +40,7 @@ in `CITATION.cff`.
 | `JCE/extensions/` | the three additional simulations of section 4.4 (advice loading, development size, development contact), with regularized iterative MCA, Firth-penalized item models and principal component indices; `README.md` is their runbook (post hoc) |
 | `JCE/analysis/review_analysis.R`, `test_review_analysis.R` | the documented reporting correction: recomputes the validation-targeting correlations with the specified separation exclusions, after checking every input against the production manifest, and its regression test |
 | `JCE/analysis/editor_review_checks.R` | the mechanism and item-model checks quoted in supplement A3 and A4 |
+| `JCE/analysis/filter_ranking_check.R` | the cluster-ranking check quoted in section 4.1 and supplement A6.11, read from the person-level data production saves for two replicates of every configuration (`--artifact-reps 2`); those data are not included, because they hold resampled survey records |
 | `JCE/figures/figures.R`, `figS2_dag.dot`, `JCE/supplement/supplement_tables.R`, `supplement_methods.md` | the manuscript's figures, the Graphviz source of Figure S2, the supplementary tables and the technical appendix text |
 | `skipMCA/` | the R package |
 | `outputs/methodology/production_v03_displays.rds`, `production_v03_claims.csv` | summary results of the production run: the displays the tables and figures use, and the 132 classified contrasts |
@@ -136,6 +137,7 @@ Rscript JCE/theory/theory_link_summary.R outputs/methodology/theory_link_r1000
 Rscript JCE/theory/theory_checks.R
 Rscript JCE/theory/josse2012_check.R
 Rscript JCE/analysis/editor_review_checks.R
+Rscript JCE/analysis/filter_ranking_check.R
 ```
 
 **4. The additional simulations** (post hoc), about 25 hours in two passes; the
@@ -207,6 +209,13 @@ platforms.
 
 ## Versions
 
+- 1.0.2 (12 October 2026): the technical appendix gains A6.11, the check of
+  how a dominant filter ranks clusters under each filter, computed by the new
+  `JCE/analysis/filter_ranking_check.R` from the saved production data, and
+  A6.5 now states when the index ranks clusters as the eligibility rate does.
+  Appendix and table wording made precise, and Table S14 prints powers of ten.
+  No simulation, theory, extension or package code and no existing result
+  changed.
 - 1.0.1 (12 October 2026): the supplementary tables and technical appendix
   reworded for readability, with readable table labels and layout, and Figure
   S2 drawn by Graphviz. No simulation, theory, extension or package code and no

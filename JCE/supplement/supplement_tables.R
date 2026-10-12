@@ -42,7 +42,7 @@ VARIANTS <- c(
   q1_low = "Diagnosis given disease .20",
   q1_high = "Diagnosis given disease .80",
   q0_high = "False-positive diagnosis .15",
-  rho_zero = "Access unrelated to deprivation",
+  rho_zero = "Access unrelated to need",
   rho_strong = "Access correlation -.5",
   kappa_zero = "No between-cluster spread in access",
   items_two = "Two advice items",
@@ -101,7 +101,7 @@ s2 <- chk |>
             `Other method` = METHODS[other],
             Verdict = if_else(claim == "equivalent", "equivalent", "undecided"),
             `Scenarios clearing 3 MCSE (of 72)` = as.character(clear),
-            `Where the others sit` = where,
+            `Scenarios not clearing 3 MCSE` = where,
             `Difference where it clears` = size)
 
 s3_base <- ds$variants |>
@@ -241,6 +241,7 @@ EXT_METHODS <- c(METHODS[c("oracle", "simple_score", "drop_items", "impute_adapt
                  fuzzy_average = "Missing fuzzy average",
                  METHODS[c("raw_items", "zero", "passive_mca", "complete_case", "category")])
 GATE_LABEL <- c(contact = "Contact filter", diagnosis = "Diagnosis filter")
+sci_power <- \(x) { e <- floor(log10(x)); sprintf("%d\u00a0×\u00a010^−%d^", as.integer(round(x / 10^e)), as.integer(-e)) }
 ext_num <- \(x, k = 3) sub("^(-?)0\\.", "\\1.", formatC(round(x, k) + 0, format = "f", digits = k))
 
 s11 <- ext$sweep |>
@@ -302,7 +303,7 @@ s14 <-tidyr::expand_grid(gate = names(GATE_LABEL), coding = names(PCA_LABEL)) |>
   left_join(pca_rho |> select(gate, mca_arm = arm, mca = range), by = c("gate", "mca_arm")) |>
   transmute(Filter = GATE_LABEL[gate], Coding = PCA_LABEL[coding],
             `Gap from closed form` = if_else(is.na(max_formula_diff), "",
-                                                         formatC(max_formula_diff, format = "e", digits = 0)),
+                                                         sci_power(max_formula_diff)),
             `Squared correlation with eligibility` = if_else(is.na(eta2), "", ext_num(eta2)),
             `Inertia ratio` = if_else(is.na(inertia_ratio), "", ext_num(inertia_ratio, 2)),
             `R², block` = if_else(is.na(r2_block), "", ext_num(r2_block)),
@@ -314,23 +315,23 @@ lines <- c(
   "# Supplementary material",
   "",
   "*Coding questionnaire skips in composite health indices: a plasmode simulation study.*",
-  "A. F. M. Tahsin Shahriar and Nasrin Lipi. Code and the summary results behind every table and figure: https://doi.org/10.5281/zenodo.23303798 (all versions).",
+  "A. F. M. Tahsin Shahriar and Nasrin Lipi. Code and the summary results behind every table and figure are archived at https://doi.org/10.5281/zenodo.23303798 (all versions).",
   "",
   "## Table S1. Design grid, 52 configurations",
   "",
   "| Block | Configurations | What varies |",
   "|---|---:|---|",
   "| Core | 24 | two populations (pooled stratum Q3, with high deprivation and weakly associated inputs, ages 18 to 49; Bangladesh 2017-18, ages 18 to 95) x *r²* .4, .6, .8 x age slope of diagnosis 0, .5 x contact and diagnosis filters; each evaluated at 20, 50 and 80% contact, 72 scenarios |",
-  "| One-at-a-time variations | 13 | around the reference scenario (pooled stratum Q3, *r²* .6, no age slope, contact filter): diagnosis given disease .20 and .80 (also under the diagnosis filter), false-positive diagnosis .15, access unrelated to deprivation, access correlation -.5, no between-cluster spread in access, two and eight advice items, equal loadings, a development sample of 500, twenty imputations |",
+  "| One-at-a-time variations | 13 | diagnosis given disease .20 and .80 (also under the diagnosis filter), false-positive diagnosis .15, access unrelated to need, access correlation -.5, no between-cluster spread in access, two and eight advice items, equal loadings, a development sample of 500, twenty imputations, each changed alone from the reference scenario (pooled stratum Q3, *r²* .6, no age slope, contact filter) |",
   "| Mechanism checks | 4 | diagnosis unrelated to disease; four always-observed proxies in place of the advice items; advice strongly informative about need; a monotone BMI truth |",
   "| Other structural strata | 3 | the three remaining cells of deprivation level against input association (coherence, A1), at the reference scenario |",
   "| Country pools | 8 | India, Nepal, Albania and Bangladesh at 18 to 49 x both filters, at the reference scenario |",
   "",
-  "Every configuration: 1,000 replicates, nominal development size 1,000 at 50% contact (500 in one variation), nominal target size 20,000. Production (23 to 25 September 2026) completed all 1,000 replicates of every configuration with no failed replicate; realized contact and prevalence were within .002 of target, and 31,200 metrics recomputed in base R from the saved row-level artifacts of 104 replicates matched the stored values exactly. Whole-cluster sampling usually produces slightly fewer people; the actual target N sets every budget and denominator. After production, every replicate of all 52 configurations was regenerated from its seeds to compute the theory diagnostics and to score missing fuzzy average (A6.9); these results are post hoc.",
+  "Every configuration has 1,000 replicates, a nominal development size of 1,000 at 50% contact (500 in one variation) and a nominal target size of 20,000. Production (23 to 25 September 2026) completed all 1,000 replicates of every configuration with no failed replicate; realized contact and prevalence were within .002 of target, and 31,200 metrics recomputed in base R from the saved row-level artifacts of 104 replicates matched the stored values exactly. Whole-cluster sampling usually produces slightly fewer people; the actual target N sets every budget and denominator. After production, every replicate of all 52 configurations was regenerated from its seeds to compute the theory diagnostics and to score missing fuzzy average (A6.9); these results are post hoc.",
   "",
   "## Table S2. Contrasts the decision rule did not order",
   "",
-  "The ten undecided contrasts and the one equivalence. No undecided contrast changed sign: in each, every scenario that clears three MCSE favours the same method.",
+  "The ten undecided contrasts and the one equivalence. No undecided contrast changed sign. In each, every scenario that clears three MCSE favours the same method.",
   "",
   md_table(s2),
   "",
@@ -342,7 +343,7 @@ lines <- c(
   "",
   "## Table S3b. Change in cluster rank correlation from 20% to 80% contact",
   "",
-  "Methods that read no filtered item (Oracle, Count, Dropped) cannot change, so their change is exactly zero.",
+  "Methods that use no filtered item (Oracle, Count, Dropped) cannot change, so their change is exactly zero.",
   "",
   md_table(s3b),
   "",
@@ -361,7 +362,7 @@ lines <- c(
   "", md_table(policy_table("diagnosis"), digits = 1), "",
   "## Table S6. Separation exclusions in the correlation analysis",
   "",
-  "Counts among 720,000 method-by-replicate-by-setting rows in 72 core scenarios. Development values repeat across three contact settings. The 6,453 development exclusions represent 2,151 distinct complete-case development fits: 2,143 under the diagnosis filter and eight under the contact filter. The four target exclusions are method-setting rows. Other targeting metrics on these rows remain included.",
+  "Counts among 720,000 method-by-replicate-by-setting rows in 72 core scenarios. Development values repeat across three contact settings. The 6,453 development exclusions represent 2,151 distinct complete-case development fits, 2,143 under the diagnosis filter and eight under the contact filter. The four target exclusions are method-setting rows. Other targeting metrics on these rows remain included.",
   "", md_table(s6), "",
   "## Table S7. Post-review sensitivity using method means",
   "",
@@ -387,7 +388,7 @@ lines <- c(
           sub("^0", "", sprintf("%.3f", albania$cluster_rho_all[albania$arm == "impute_frozen"])),
           sub("^0", "", sprintf("%.3f", albania$cluster_rho_all[albania$arm == "simple_score"]))),
   "",
-  sprintf("Missing fuzzy average (post hoc), ranked among eleven methods in the same %d combinations: best %d, median %g, worst %d. Its cluster rank correlation minus that of dropping the items ranged from %s to %s.",
+  sprintf("Ranked among eleven methods in the same %d combinations, missing fuzzy average (post hoc) had a best rank of %d, a median rank of %g and a worst rank of %d. Its cluster rank correlation minus that of dropping the items ranged from %s to %s.",
           nrow(fa_ranks), min(fa_ranks$rank), median(fa_ranks$rank), max(fa_ranks$rank),
           sub("^0", "", sprintf("%.3f", min(fa_gap$gap))), sub("^0", "", sprintf("%.3f", max(fa_gap$gap)))),
   "",
