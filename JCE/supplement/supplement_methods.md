@@ -361,14 +361,15 @@ analysed columns with their full-data masses. Write \(n_j=\sum_i z_{ij}\),
 \]
 
 which for a crisp item is \(\sum_jf_jm_j(h)^2\), with \(m_j\) the mean of \(h\)
-in category *j*. The eligibility score is \(s_G=(G-p)/\sqrt{p(1-p)}\).
+in category *j*. For fuzzy codings and subset analyses it is the item's
+contribution to the criterion, and we keep the name. The eligibility score is \(s_G=(G-p)/\sqrt{p(1-p)}\).
 
 **Lemma A6.0 (the MCA criterion).** With
 \(B=Q^{-1}\sum_q\sum_{j\in J_q\cap S}(z_j-f_j\mathbf 1)(z_j-f_j\mathbf 1)^\top/n_j\),
 every centered unit-variance score satisfies
 \(h^\top Bh/n=\lambda(h)=Q^{-1}\sum_q\eta_q^2(h)\). The first axis maximizes
 \(\lambda(h)\), and \(\lambda_1=\max_h\lambda(h)\). *Proof.* Column *j* of the
-standardized residual matrix is \((z_j-f_j\mathbf 1)/\sqrt{Qn_j}\), and
+standardized residual matrix \(T\) is \((z_j-f_j\mathbf 1)/\sqrt{Qn_j}\), so \(B=TT^\top\), and
 \((z_j-f_j\mathbf 1)^\top h=z_j^\top h\) for centered \(h\). Subset analysis keeps
 only the columns in \(S\) (Greenacre and Pardo 2006). For complete crisp data
 this is the homogeneity form of MCA (Le Roux and Rouanet 2010). ∎
@@ -394,9 +395,9 @@ categories.
 (b) Subset MCA, with the skip column excluded, gives
 \(\eta_q^2(s_G)=p(1-p)\,[(1-\pi)/p+\pi/p]=1-p\). Subset MCA gives the same solution as
 missing passive modified margin (Josse et al. 2012), so modified margin keeps
-\(1-p\) as well. The "multiple" variant of subset MCA for incomplete data, with
-one missing category per cell, has the same analysed columns and the same
-value.
+\(1-p\) as well. The "multiple" variant of subset MCA for incomplete data
+(Nienkemper-Swanepoel et al. 2024), with one missing category per cell, has the
+same analysed columns and the same value.
 
 (c) The skip coded "no", with \(\bar v=(1,0)\), has \(f_{\text{no}}=1-p\pi\) and
 \(f_{\text{yes}}=p\pi\), so
@@ -419,17 +420,37 @@ each column equal \(f_j\), so with \(S_j\) the sum of \(h\) over the eligible in
 category *j* and \(H=\sum_jS_j\), \(\sum_iz_{ij}h_i=S_j-f_jH\) because \(h\) is
 centered, and \(\eta_q^2=n^{-2}\big[\sum_jS_j^2/f_j-H^2\big]\). The eligible in
 category *j* number \(npf_j\), so by the Cauchy-Schwarz inequality
-\(S_j^2\le npf_j\sum_{i\in E_j}h_i^2\); sum over *j*. ∎ Van der Heijden and
-Escofier (2003) note that missing fuzzy average gives the lowest total inertia;
-the corollary bounds the inertia it leaves to the items.
+\(S_j^2\le npf_j\sum_{i\in E_j}h_i^2\); sum over *j*. ∎ The bound is reached by
+any score that is a centered function of the item's answer among the eligible
+and zero for the skipped. Under missing fuzzy average the skipped sit at each
+item's centroid and add no inertia (Josse et al. 2012); the corollary bounds
+the inertia it leaves to the items, and A6.3 gives \(\lambda_A\) exactly.
 
-**Proposition A6.3 (a lower bound).**
+**Proposition A6.3 (a lower bound, and the eigenvalues of the filtered block).**
 \(\lambda_1\ge\lambda(s_G)=Q^{-1}\sum_{q}\eta_q^2(s_G)\ge
-Q^{-1}\sum_{q\le k}\eta_q^2(s_G)\), indexing the filtered items first. Under missing
-single, \(\lambda_1\ge k/Q\), and the filtered block analysed alone
-has eigenvalue exactly 1, so the filter is an exact dimension. In the core design
-\(k/Q=.40\); in probe replicates the first eigenvalue was .404 to .407, with an
-axis correlating .995 to .998 with eligibility.
+Q^{-1}\sum_{q\le k}\eta_q^2(s_G)\), indexing the filtered items first. Let
+\(\lambda_E\) be the first eigenvalue of the MCA of the filtered items among the
+eligible alone. Analysed alone, the coded filtered block has the eligibility
+score \(s_G\) as an eigenvector, with eigenvalue 1 under missing single,
+\(1-p\) under subset MCA and 0 under missing fuzzy average. Its other
+eigenvalues are those of the eligible-only analysis, multiplied by \(p\) under
+missing fuzzy average, so \(\lambda_A\) is 1, \(\max(1-p,\lambda_E)\) and
+\(p\lambda_E\). *Proof.* For an answer column,
+\(z_j-f_j\mathbf 1=u_j+f_{j\mid G}(G-p\mathbf 1)\) under missing single and
+subset MCA, where \(u_j\) equals \(z_{ij}-f_{j\mid G}\) for the eligible and 0
+for the skipped; under missing fuzzy average \(z_j-f_j\mathbf 1=u_j\). The
+\(u_j\) of an item sum to zero and each is orthogonal to \(G-p\mathbf 1\), so the
+cross terms vanish. The block's matrix is then the eligible-only matrix,
+multiplied by \(p\) under missing fuzzy average, plus
+\((G-p\mathbf 1)(G-p\mathbf 1)^\top\) divided by \(np\) under subset MCA, and by
+\(np(1-p)\) once the skip column is added under missing single. ∎ Under missing
+single, \(\lambda_1\ge k/Q\), and the filter is an exact dimension. In the core
+design \(k/Q=.40\); in probe replicates the first eigenvalue was .404 to .407,
+with an axis correlating .995 to .998 with eligibility. In the 51,000
+production development samples the block eigenvalue was 1 under missing single
+in every sample. Under subset MCA it equalled \(1-p\) in every sample under the
+diagnosis filter and in 83% under the contact filter, and was larger in the
+rest, where \(\lambda_E\) exceeds \(1-p\).
 
 **Proposition A6.4 (block dominance, the inertia ratio and instability).** Let
 \(h_X\) and \(h_A\) be the first axes of the substantive block and of the coded
@@ -440,21 +461,25 @@ squared correlation ratio, and \(C\) the Gram matrix of the two scores. Its
 leading value is a Rayleigh-Ritz lower bound for \(\lambda_1\), exact when the
 first axis lies in that span. The diagonal entries are
 \(Q^{-1}[P\lambda_X+\sum_{q\le k}\eta_q^2(h_X)]\) and
-\(Q^{-1}[k\lambda_A+\sum_{q>k}\eta_q^2(h_A)]\). The leading term of each diagonal entry, \(P\lambda_X\) or \(k\lambda_A\), is the block's number of items times its maximum axial inertia, the first eigenvalue of its separate analysis. It is what the block contributes along its own first axis in the joint analysis. When the blocks are weakly associated the cross terms are small and the leading direction follows the larger diagonal, so the filtered block dominates as the inertia ratio \(\kappa=k\lambda_A/(P\lambda_X)\) passes 1. Multiple factor analysis divides each group by its first
+\(Q^{-1}[k\lambda_A+\sum_{q>k}\eta_q^2(h_A)]\). The leading term of each diagonal entry, \(P\lambda_X\) or \(k\lambda_A\), is the block's number of items times its maximum axial inertia, the first eigenvalue of its separate analysis. It is what the block contributes along its own first axis in the joint analysis. When the blocks are weakly associated the cross terms are small and the leading direction follows the larger diagonal, so the filtered block dominates as the inertia ratio \(\kappa=k\lambda_A/(P\lambda_X)\) passes 1. If the blocks are independent in the sample, in that every centered indicator of one is orthogonal to every centered indicator of the other, \(B\) is the sum of the two blocks' matrices weighted by \(P/Q\) and \(k/Q\), its eigenvalues are theirs so weighted, and \(\kappa=1\) is the exact threshold. Multiple factor analysis weights each group by the inverse of its first
 eigenvalue so that no group dominates (Escofier and Pagès 1994); \(\kappa\)
-measures the dominance an undivided filtered block exerts. By A6.3,
-\(k\lambda_A\ge\sum_{q\le k}\eta_q^2(s_G)\), so Theorem 1 bounds \(\kappa\) from below, with
-\(\kappa\ge k/(P\lambda_X)\) under missing single and
-\(\kappa\ge k(1-p)/(P\lambda_X)\) under subset MCA.
+measures the dominance an unweighted filtered block exerts. By A6.3,
+\(\kappa\) equals \(k/(P\lambda_X)\) under missing single,
+\(k\max(1-p,\lambda_E)/(P\lambda_X)\) under subset MCA and
+\(kp\lambda_E/(P\lambda_X)\) under missing fuzzy average. Theorem 1 gives the
+part of \(k\lambda_A\) that eligibility carries, \(\sum_{q\le k}\eta_q^2(s_G)\),
+which is \(k\), \(k(1-p)\) and 0 under these codings.
 For binary items, \(k\lambda_A\) is the largest eigenvalue of their correlation
-matrix, at least \(1+(k-1)\bar r\). In probe replicates with
+matrix, at least \(1+(k-1)\bar r\) with \(\bar r\) their mean correlation. In probe replicates with
 \(|\kappa-1|>.25\), the span of \(\{h_X,h_A\}\) explained a median .997 of
 the first axis (5th percentile .954).
 
 By the Davis-Kahan theorem in the form of Yu, Wang and Samworth (2015), the
-angle between a sample axis and its population counterpart is bounded by twice
-the sampling perturbation of \(B\) divided by the eigengap
-\(\lambda_1-\lambda_2\). In the two-block reduction the gap closes as
+sine of the angle between a sample axis and its population counterpart is at
+most twice the sampling perturbation of \(T^\top T\) divided by the population
+eigengap \(\lambda_1-\lambda_2\). \(T^\top T\) is the matrix over the analysed
+categories with the same nonzero eigenvalues as \(B=TT^\top\); unlike \(B\), its
+size does not grow with \(n\). In the two-block reduction the gap closes as
 \(\kappa\to1\), so development samples near the threshold give axes that swing
 between the blocks.
 
@@ -477,9 +502,10 @@ as the cluster eligibility rate does. A block can dominate without carrying
 much of the filter, as subset MCA does when developed at 80% contact (A7). The weights are fixed in development, but \(\sigma_A\) is
 a property of the target. If cluster eligibility rates vary with logit-scale
 variance \(\sigma_L^2\) around *p*, the delta method and binomial sampling within
-clusters of mean size \(\bar n\) give
-\(\sigma_A^2\approx[p(1-p)]^2\sigma_L^2+p(1-p)/\bar n\), largest at
-\(p=\tfrac12\). Under the contact filter the target's *p* is its contact rate,
+clusters of mean size \(\bar n\) put the between-cluster variance of the
+eligibility rate at about \([p(1-p)]^2\sigma_L^2+p(1-p)/\bar n\), largest at
+\(p=\tfrac12\). With \(h_A\) close to eligibility and scaled in development,
+\(\sigma_A\) is proportional to its square root. Under the contact filter the target's *p* is its contact rate,
 so the filter's pull peaks at 50% contact. Under the diagnosis filter *p* stays
 below one half, and both \(\sigma_A\) and \(\rho_A\) rise with contact. With few
 people eligible, \(\sigma_A\) is small and the substantive part still orders
@@ -495,7 +521,21 @@ selected person is eligible, and the selected share of any group outside the
 filter is zero. If \(b>p\), at most \((b-p)/b\) of the slots go outside it.
 *Proof.* Counting. ∎ The skip coded "no" meets the premise only approximately, since
 an eligible respondent who answered "no" to every item has the same coded
-items as a skipped one, which is why it selected up to .00002 rather than 0.
+items as a skipped one, which is why it selected .00001 of the people with
+undiagnosed disease on average, and at most .00004 in any configuration, rather
+than none.
+
+Missing fuzzy average is neutral in mean, not in spread. The skipped sit at
+each item's centroid, so the filtered items add nothing to their scores, while
+those asked keep the items' variance and reach both ends of the score. When
+the filtered block carries weight on the axis, those asked therefore fill more
+of a tight budget than their share. With eight advice items under the contact
+filter, where its inertia ratio averaged .89 in probe replicates, the high-need
+share selected at the 10% budget fell from .314 to .286 and .272 as contact rose
+from 20 to 50 and 80%, against .322 for dropping the items. In the core design,
+with inertia ratios of about .45 to .54 under the contact filter and .05 to .06
+under the diagnosis filter, it stayed within .012 of dropping on the high-need
+share selected (Table S10).
 
 **Proposition A6.7 (structural zeros and identification).** In the generator,
 factual advice is \(A^*_{ijk,s}=C_{ij,s}\cdot1[\cdot]\) (A3). Under the contact
@@ -513,8 +553,17 @@ components of their correlation matrix, the first eigenvalue is
 \(x=G\cdot Y\) with \(Y\) the answer, has
 \(\operatorname{cov}(G,x)=p\pi(1-p)\), \(\operatorname{var}(x)=p\pi(1-p\pi)\)
 and so \(\operatorname{corr}(s_G,x)^2=\pi(1-p)/(1-p\pi)\), the value of
-Corollary A6.1(c). Propositions A6.3 to A6.6 carry over with correlation-matrix
-eigenvalues. A7 tests this extension by simulation.
+Corollary A6.1(c). The DHS wealth index codes not-applicable answers 0 in this
+way, for instance whether a toilet is shared (Rutstein, no date). The bound of
+A6.3 and Propositions A6.4 to A6.6 carry over with correlation-matrix
+eigenvalues; since such an eigenvalue already sums over columns, the inertia
+ratio is \(\lambda_A/\lambda_X\). Corollary A6.2 does not carry over. Replacing
+the skip by the share of those asked answering yes (mean imputation) leaves the
+column uncorrelated with eligibility, but the imputed columns keep the
+correlation matrix of those asked, so their block is not shrunk by *p*. Its
+inertia ratio was .51 under the diagnosis filter (Table S14), against .06 for
+missing fuzzy average at 50% development contact (Table S13). A7 tests this
+extension by simulation.
 
 **A6.9 Verification on the production replicates.**
 `JCE/theory/theory_production_link.R` regenerates each production replicate
@@ -537,24 +586,34 @@ with filtered items) took 2 hours 51 minutes on six workers on 8 October 2026;
 `JCE/theory/theory_link_summary.R` produces Table 2, Figure 1, Table S10 and the
 numbers below.
 
-- *Theorem 1.* The maximum difference between the empirical value and the
-  formula over 204,000 coding-by-replicate rows was \(6\times10^{-15}\), and the
-  skip coded "no" carried less filter than subset MCA in 51,000 of 51,000 replicates.
+- *Theorem 1.* Over the 153,000 rows of the three codings, the largest
+  difference between the empirical value and the formula was
+  \(6\times10^{-15}\); missing fuzzy average is 0 by Corollary A6.1(d) and was
+  not recomputed. Theorem 1 is an identity, so this checks that each coding was
+  applied as defined. The skip coded "no" carried less filter than subset MCA in
+  51,000 of 51,000 replicates.
 - *Inertia ratio.* Over 153 configuration-coding pairs, its Spearman
   correlation with the loss against dropping the items was .83 (.88 for the block R², .79
-  replicate by replicate). Above \(\kappa=1\) the block took on average .99 of
+  replicate by replicate). For each coding separately it was .74 for subset MCA, .86 for the
+  skip coded "no" and .23 for missing single, whose inertia ratio was above 1.2
+  in every configuration. Above \(\kappa=1\) the block took on average .99 of
   the axis under missing single, .74 under subset MCA and .86 under
   the skip coded "no"; the two pairs below 1 took .15 and .24 and lost −.005 and .000.
 - *Instability.* The within-configuration replicate standard deviation of targeting was .12 for \(|\kappa-1|\) up to .15, .16 from .15 to .30, .08 from .30 to .60 and .06 above .60, with mean eigengaps .036, .038, .099 and .195 in the same bands. The Spearman
-  correlation between \(|\kappa-1|\) and the standard deviation was −.64.
-- *Budget below the share asked.* In every diagnosis-filter cell whose diagnosed share exceeded the
-  10% budget, the three codings selected 0 to .00001 of the people with
-  undiagnosed disease, against .17 for dropping the items; below the budget
-  they selected .03 to .12.
+  correlation between \(|\kappa-1|\) and the standard deviation was −.64. The
+  pattern is that of subset MCA, whose standard deviation was .21 within .3 of
+  \(\kappa=1\) and .06 beyond. For the skip coded "no", which carries little
+  filter near \(\kappa=1\), it was .08 and .07.
+- *Budget below the share asked.* In the 18 diagnosis-filter cells
+  (configuration and contact level) whose diagnosed share exceeded the 10%
+  budget, 17 at 80% contact and one at 50%, missing single and subset MCA selected none of the
+  people with undiagnosed disease and the skip coded "no" at most .00004,
+  against .17 for dropping the items; below the budget they selected .03 to .12.
 - *Corollary A6.2.* On probe replicates (`JCE/theory/theory_checks.R`, 12 per
-  cell), the fuzzy-average block eigenvalue reached at most .64 of *p* in all 12
-  settings, and its inertia ratio was .40 to .63 under the contact filter (.89
-  with eight items) and .03 to .09 under the diagnosis filter.
+  cell), the fuzzy-average block eigenvalue averaged at most .64 of *p* in the
+  12 settings (by A6.3 this ratio is \(\lambda_E\)), and its inertia ratio
+  averaged .40 to .63 under the contact filter (.89 with eight items) and .03 to
+  .09 under the diagnosis filter.
 
 **A6.10 A published simulation.** Josse et al. (2012, Table 3, rows 7 and 8)
 report that modified margin "can really crash" when 60 of 100 individuals miss
@@ -562,9 +621,10 @@ variables 1 to 3 together and 60 miss variables 9 and 10 together, without a
 stated reason. Theorem 1 gives modified margin a squared correlation ratio with the missingness pattern of .6 per item
 there and missing fuzzy average zero. `JCE/theory/josse2012_check.R` rebuilds
 the design with 500 replications per cell and reproduces all six published
-medians of the modified RV coefficient within .01. For weak and strong
-structure they are .30 and .45 for missing single, .42 and .71 for modified
-margin, and .77 and .91 for missing fuzzy average. The missingness indicators explained .50, .48 and .01 of the
+medians of the modified RV coefficient within .01. The reproduced medians for
+weak and strong structure are .30 and .45 for missing single, .42 and .71 for
+modified margin (published .43 and .71), and .77 and .91 for missing fuzzy
+average. The missingness indicators explained .50, .48 and .01 of the
 three methods' first two axes under weak structure, and .50, .23 and .01 under
 strong structure. The collapse is the missingness pattern dominating the first axes.
 
@@ -630,7 +690,8 @@ average (A6.9), and four further kinds of index.
   for asset indices. A filtered item enters as its yes indicator with the skip
   coded 0, as the same indicator with the skip replaced by the share of those
   asked answering yes (mean imputation, the counterpart of missing fuzzy
-  average), as yes, no and skipped indicators, or not at all. A6.8 gives the
+  average but without the shrinkage of Corollary A6.2, A6.8), as yes, no and
+  skipped indicators, or not at all. A6.8 gives the
   closed forms checked in every development sample.
 
 The two passes took 17.3 and 7.9 hours of computation on six workers in 640
@@ -671,8 +732,8 @@ and Figure 4.
   MCA's inertia ratio fell from 1.93 to 1.20 and 1.09 and its filtered block
   still took .992, .706 and .742 of the first axis, but eligibility explained
   .992, .625 and .002 of it, and its cluster rank correlation, over the three target contact levels, was .007 to .042, .434 to .520 and .801 to .848. With 80% asked, the block keeps
-  \(1-p=.2\) of the filter (Theorem 1) and its axis follows the answers of
-  those asked. Missing single kept \(\kappa=2.42\), eligibility explained .996
+  \(1-p=.2\) of the filter (Theorem 1); as this is below \(\lambda_E\), its axis
+  follows the answers of those asked (A6.3). Missing single kept \(\kappa=2.42\), eligibility explained .996
   of its axis at every level, and it stayed below .05. Under the diagnosis
   filter the minimum at 50% target contact also appeared; there the spread of
   cluster eligibility and its correlation with need both rise with contact
@@ -688,3 +749,16 @@ and Figure 4.
   eligibility explained .678 and the index reached .744 to .757. Mean
   imputation has zero squared correlation with eligibility and reached .866
   to .905 and .861 to .873.
+
+### References cited only in the supplement
+
+Nienkemper-Swanepoel J, le Roux NJ, Gardner-Lubbe S. On subset multiple
+correspondence analysis for incomplete multivariate categorical data. Commun
+Stat Simul Comput 2024;53:5229-41. https://doi.org/10.1080/03610918.2023.2173779.
+
+Rutstein SO. Steps to constructing the new DHS Wealth Index. Rockville, MD: The
+DHS Program; no date. https://dhsprogram.com/programming/wealth%20index/Steps_to_constructing_the_new_DHS_Wealth_Index.pdf
+(accessed 19 October 2026).
+
+Every other source in this supplement is in the reference list of the main
+text.

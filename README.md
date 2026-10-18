@@ -2,7 +2,7 @@
 
 Code for *Coding questionnaire skips in composite health indices: a plasmode
 simulation study* (submitted to the Journal of Clinical Epidemiology). The paper derives how much of a questionnaire filter
-each coding of a skipped item carries into an index built by multiple
+a skipped item carries under each coding in an index built by multiple
 correspondence analysis (MCA), and tests the theory in a plasmode simulation
 that resamples real covariates from four Demographic and Health Surveys,
 imposes known disease, contact with care, diagnosis and advice items, and
@@ -194,7 +194,9 @@ the scenario and one equivalence, and left 10 undecided.
 
 Theory (post hoc): regeneration reproduced production exactly in all 52
 configurations; Theorem 1 matched the empirical squared correlation ratio in
-all 204,000 coding-by-replicate rows to within 6e-15.
+all 153,000 coding-by-replicate rows of the three codings it is computed for
+to within 6e-15. Theorem 1 is an identity, so this checks that each coding was
+applied as defined.
 
 Additional simulations (post hoc): 16 configurations at 1,000 replicates in two
 passes with no failed chunk. The reference configuration reproduced production
@@ -209,6 +211,16 @@ platforms.
 
 ## Versions
 
+- 1.0.3 (19 October 2026): the technical appendix states the eigenvalues of the
+  filtered block exactly (A6.3) and with them the inertia ratio (A6.4), replaces
+  a statement about the total inertia of missing fuzzy average that does not
+  hold once masses are recomputed, adds that missing fuzzy average is neutral in
+  mean but not in spread (A6.6), defines the principal component inertia ratio
+  and notes that the A6.2 bound does not carry over to mean imputation (A6.8),
+  and corrects counts (153,000 rows, not 204,000) and budget figures (A6.9).
+  `JCE/theory/theory_link_summary.R` prints the new figures; its saved summary
+  is unchanged. The skipMCA vignette says inertia ratio. No simulation,
+  extension or package code and no existing result changed.
 - 1.0.2 (12 October 2026): the technical appendix gains A6.11, the check of
   how a dominant filter ranks clusters under each filter, computed by the new
   `JCE/analysis/filter_ranking_check.R` from the saved production data, and

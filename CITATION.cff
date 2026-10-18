@@ -4,8 +4,8 @@ title: "Coding questionnaire skips in composite health indices: code"
 abstract: >-
   Code, summary results and the skipMCA R package for the paper "Coding
   questionnaire skips in composite health indices: a plasmode simulation
-  study". The paper derives how much of a questionnaire filter each coding of a
-  skipped item carries into an index built by multiple correspondence analysis
+  study". The paper derives how much of a questionnaire filter a skipped item
+  carries under each coding in an index built by multiple correspondence analysis
   and tests the theory in a plasmode simulation resampling covariates from four
   Demographic and Health Surveys. No survey microdata are included.
 type: software
@@ -17,8 +17,8 @@ authors:
     orcid: "https://orcid.org/0009-0003-0565-0803"
 license: MIT
 repository-code: "https://github.com/Tahsin2799/skip-coding-MCA"
-version: 1.0.2
-date-released: 2026-10-12
+version: 1.0.3
+date-released: 2026-10-19
 keywords:
   - multiple correspondence analysis
   - skip pattern

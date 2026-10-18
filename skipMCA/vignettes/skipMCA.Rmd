@@ -51,8 +51,10 @@ Missing single, the skip as its own category, gives every filtered item a
 squared correlation ratio with eligibility of 1, and the first axis is the
 filter. Subset MCA keeps one minus the share
 asked. Missing fuzzy average, which gives the skipped the answers of those
-asked, carries none. Under it, a filtered item's squared correlation ratio with
-any score is at most the share asked, so its capture ratio stays low.
+asked, leaves each filtered item uncorrelated with eligibility. Under it, a
+filtered item's squared correlation ratio with any score is at most the share
+asked, so its inertia ratio stays low. Those asked still keep the items' spread,
+so when that ratio nears 1, compare allocation with the items dropped.
 
 ```{r}
 audit$items[audit$items$item == "advice1", ]

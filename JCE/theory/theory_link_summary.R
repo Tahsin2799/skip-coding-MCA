@@ -141,6 +141,29 @@ pools_fa <- d |>
   group_by(population, gate, setting) |>
   summarise(cluster_rho_all = mean(cluster_rho_all), .groups = "drop")
 
+# Supplement A6.3, A6.6 and A6.9 (added 19 October 2026): the inertia ratio and
+# instability within each coding, the exact eigenvalue of the filtered block,
+# budget cells above the share diagnosed, and missing fuzzy average with eight
+# advice items.
+cat("\n== Within codings, exact block eigenvalues, budget cells ==\n")
+show(by_cfg |> group_by(coding) |>
+       summarise(pairs = n(), spearman_kappa_loss = round(stats::cor(kappa, loss, method = "spearman"), 2),
+                 sd_within_.3 = num(tau_sd[abs(kappa - 1) <= .3]), sd_beyond_.3 = num(tau_sd[abs(kappa - 1) > .3]),
+                 min_kappa = round(min(kappa), 2), .groups = "drop"))
+show(cap |> group_by(coding, gate) |>
+       summarise(samples = n(), lamA_is_1 = mean(abs(lamA - 1) < 1e-9),
+                 lamA_is_1_minus_p = num(abs(lamA - (1 - p_dev)) < 1e-9),
+                 lamA_at_least_1_minus_p = mean(lamA >= 1 - p_dev - 1e-9), .groups = "drop"))
+show(d |> filter(!failed, gate == "diagnosis", arm %in% c("zero", "category", "passive_mca", "drop_items")) |>
+       group_by(config_id, setting, arm) |>
+       summarise(recognized_rate = mean(recognized_rate), unrec = mean(b10_unrec_capture), .groups = "drop") |>
+       filter(recognized_rate > 0.10) |>
+       group_by(arm) |>
+       summarise(cells_above_budget = n(), settings = paste(unique(setting), collapse = " "),
+                 mean = signif(mean(unrec), 2), max = signif(max(unrec), 2), .groups = "drop"))
+show(d |> filter(!failed, variant == "items_eight", arm %in% c("fuzzy_average", "drop_items")) |>
+       group_by(arm, setting) |> summarise(hn_capture = num(b10_hn_capture), .groups = "drop"))
+
 saveRDS(list(n_rep = n_rep, by_cfg = by_cfg, cap = cap, claims = claims, cellwise = cellwise,
              by_setting = by_setting, theory_table = theory_table, pools_fa = pools_fa),
         file.path("JCE/theory", sprintf("theory_link_summary_r%d.rds", n_rep)))
