@@ -211,6 +211,10 @@ platforms.
 
 ## Versions
 
+- 1.0.4 (19 October 2026): the technical appendix cites two further sources,
+  the global MPI's rule for households without the eligible population (A2,
+  the "no" coding) and a thesis that found subset correspondence analysis
+  reliable below 30% missingness (A6.1). No code or result changed.
 - 1.0.3 (19 October 2026): the technical appendix states the eigenvalues of the
   filtered block exactly (A6.3) and with them the inertia ratio (A6.4), replaces
   a statement about the total inertia of missing fuzzy average that does not

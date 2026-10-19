@@ -89,7 +89,11 @@ individual, and the combined kerosene/coal rung is counted as deprived. BMI
 uses the WHO category thresholds (WHO, 2000), with underweight and obesity
 flagged but overweight unflagged. The work indicator is a study design choice.
 The score is therefore a prespecified six-domain count, not a validated MPI or
-an externally validated measure of healthcare need.
+an externally validated measure of healthcare need. None of its six indicators
+is filtered. The global MPI itself counts a household without the eligible
+population for an indicator, such as one with no child of school age for
+school attendance, as non-deprived (Alkire and Santos 2014), which is the skip
+coded "no" of the main text.
 
 ### A3. Imposed mechanisms
 
@@ -397,7 +401,9 @@ categories.
 missing passive modified margin (Josse et al. 2012), so modified margin keeps
 \(1-p\) as well. The "multiple" variant of subset MCA for incomplete data
 (Nienkemper-Swanepoel et al. 2024), with one missing category per cell, has the
-same analysed columns and the same value.
+same analysed columns and the same value. In a simulation, Hendry (2015) found
+that subset correspondence analysis performed well provided less than 30% of any
+variable was missing, which is consistent with a residual of \(1-p\) per item.
 
 (c) The skip coded "no", with \(\bar v=(1,0)\), has \(f_{\text{no}}=1-p\pi\) and
 \(f_{\text{yes}}=p\pi\), so
@@ -751,6 +757,16 @@ and Figure 4.
   to .905 and .861 to .873.
 
 ### References cited only in the supplement
+
+Alkire S, Santos ME. Measuring acute poverty in the developing world: robustness
+and scope of the multidimensional poverty index. World Dev 2014;59:251-74.
+https://doi.org/10.1016/j.worlddev.2014.01.026. The rule for households without
+the eligible population is in section 3.3 of the working paper version (OPHI
+Working Paper 59, 2013).
+
+Hendry GM. The management of missing categorical data: comparison of multiple
+imputation and subset correspondence analysis [PhD thesis]. Durban: University
+of KwaZulu-Natal; 2015. http://hdl.handle.net/10413/15643.
 
 Nienkemper-Swanepoel J, le Roux NJ, Gardner-Lubbe S. On subset multiple
 correspondence analysis for incomplete multivariate categorical data. Commun
