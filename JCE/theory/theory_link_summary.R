@@ -164,6 +164,27 @@ show(d |> filter(!failed, gate == "diagnosis", arm %in% c("zero", "category", "p
 show(d |> filter(!failed, variant == "items_eight", arm %in% c("fuzzy_average", "drop_items")) |>
        group_by(arm, setting) |> summarise(hn_capture = num(b10_hn_capture), .groups = "drop"))
 
+# Supplement A6.9 (added 12 November 2026): the inertia ratio as a rule for a
+# single development sample. The outcome is eligibility explaining more than
+# half the first axis; the second rule adds that the filtered block's own first
+# axis is eligibility (block eigenvalue 1 - p under subset MCA, Proposition A6.3).
+cat("\n== The inertia ratio in single development samples ==\n")
+show(cap |> mutate(dominant = filter_share > .5, block_axis_is_filter = abs(lamA - (1 - p_dev)) < 1e-8) |>
+       filter(coding == "subset") |> group_by(gate) |>
+       summarise(samples = n(), filter_dominant = num(dominant), kappa_above_1 = num(kappa > 1),
+                 sensitivity = num((kappa > 1)[dominant]), specificity = num((kappa <= 1)[!dominant]),
+                 accuracy = num((kappa > 1) == dominant),
+                 accuracy_with_block_axis = num((kappa > 1 & block_axis_is_filter) == dominant),
+                 specificity_with_block_axis = num(!(kappa > 1 & block_axis_is_filter)[!dominant]),
+                 r2_elig_when_block_axis_is_answers = num(filter_share[kappa > 1 & !block_axis_is_filter]),
+                 r2_block_when_block_axis_is_answers = num(block_share[kappa > 1 & !block_axis_is_filter]),
+                 .groups = "drop"))
+show(cap |> mutate(dominant = filter_share > .5) |> group_by(coding, gate) |>
+       summarise(samples = n(), filter_dominant = num(dominant), kappa_above_1 = num(kappa > 1),
+                 accuracy = num((kappa > 1) == dominant), .groups = "drop"))
+show(cap |> filter(block == "core", gate == "contact", coding == "subset") |>
+       summarise(P_lamX = num(P_INPUTS * lamX), k_1_minus_p = num(k * (1 - p_dev)), k_lamA = num(k * lamA)))
+
 saveRDS(list(n_rep = n_rep, by_cfg = by_cfg, cap = cap, claims = claims, cellwise = cellwise,
              by_setting = by_setting, theory_table = theory_table, pools_fa = pools_fa),
         file.path("JCE/theory", sprintf("theory_link_summary_r%d.rds", n_rep)))

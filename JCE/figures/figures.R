@@ -33,7 +33,7 @@ METHODS <- c(
   raw_items = "Supervised model (reference)",
   zero = "Skip coded as \"no\"",
   passive_mca = "Subset MCA",
-  complete_case = "Complete-case analysis",
+  complete_case = "Complete case analysis",
   category = "Missing single (skip as its own category)"
 )
 FILTERS <- c(contact = "Contact filter", diagnosis = "Diagnosis filter")
@@ -133,10 +133,10 @@ save_fig(p2, "fig3", 7.2, 5.6)
 APPARENT <- c(
   auc_index_scored = "AUC of the index",
   auc_model_scored = "AUC of the model",
-  log_or_top = "Top-tier odds ratio\nDevelopment",
-  log_or_top_target = "Top-tier odds ratio\nTarget",
-  beta_within = "Within-cluster slope",
-  beta_between = "Between-cluster slope"
+  log_or_top = "Odds ratio of top tier\nDevelopment",
+  log_or_top_target = "Odds ratio of top tier\nTarget",
+  beta_within = "Slope within clusters",
+  beta_between = "Slope between clusters"
 )
 TARGETING <- c(
   cluster_rho_all = "Cluster rank correlation",
@@ -203,7 +203,7 @@ p4a <- ggplot(f4a, aes(loading, diff, colour = series, shape = series, linetype 
   ext_scales +
   facet_wrap(~filter) +
   scale_x_continuous(breaks = seq(0, 1, 0.25), labels = c("0", ".25", ".5", ".75", "1")) +
-  labs(x = "Advice loading on vulnerability (production .25)",
+  labs(x = "Advice loading on vulnerability (base .25)",
        y = "Difference from dropping the items") +
   theme_fig()
 
@@ -214,7 +214,7 @@ p4b <- ggplot(f4b, aes(size, diff, colour = series, shape = series, linetype = f
                        group = interaction(series, fit))) +
   ext_scales +
   facet_wrap(~"Diagnosis filter") +
-  labs(x = "Development sample\n(events per item-model parameter)", y = NULL) +
+  labs(x = "Development sample\n(events per parameter of item models)", y = NULL) +
   theme_fig()
 
 CODINGS <- c(category = "Missing single", passive_mca = "Subset MCA", zero = "Skip coded as \"no\"")

@@ -36,7 +36,7 @@ in `CITATION.cff`.
 | `methodology/v2/tests/` | contract tests |
 | `JCE/theory/filter_capture.R` | the theory's quantities: squared correlation ratios with eligibility, the inertia ratio, block and eligibility R², and missing fuzzy average (post hoc) |
 | `JCE/theory/theory_production_link.R`, `theory_link_summary.R` | regenerates every production replicate from its seeds, computes the theory diagnostics and scores missing fuzzy average, then pairs it with the ten methods under the frozen rule (post hoc) |
-| `JCE/theory/theory_checks.R`, `josse2012_check.R`, `theory_figure.R` | probe checks of the propositions, the rebuilt simulation of Josse et al. (2012), and Figure 1 |
+| `JCE/theory/theory_checks.R`, `decomposition_check.R`, `josse2012_check.R`, `theory_figure.R` | probe checks of the propositions and of Theorem 2 (the joint analysis as an update of rank one), the rebuilt simulation of Josse et al. (2012), and Figure 1 |
 | `JCE/extensions/` | the three additional simulations of section 4.4 (advice loading, development size, development contact), with regularized iterative MCA, Firth-penalized item models and principal component indices; `README.md` is their runbook (post hoc) |
 | `JCE/analysis/review_analysis.R`, `test_review_analysis.R` | the documented reporting correction: recomputes the validation-targeting correlations with the specified separation exclusions, after checking every input against the production manifest, and its regression test |
 | `JCE/analysis/editor_review_checks.R` | the mechanism and item-model checks quoted in supplement A3 and A4 |
@@ -135,6 +135,7 @@ Rscript JCE/theory/theory_production_link.R --reps 1000 \
   --out outputs/methodology/theory_link_r1000
 Rscript JCE/theory/theory_link_summary.R outputs/methodology/theory_link_r1000
 Rscript JCE/theory/theory_checks.R
+Rscript JCE/theory/decomposition_check.R
 Rscript JCE/theory/josse2012_check.R
 Rscript JCE/analysis/editor_review_checks.R
 Rscript JCE/analysis/filter_ranking_check.R
@@ -211,6 +212,19 @@ platforms.
 
 ## Versions
 
+- 1.0.5 (12 November 2026): the technical appendix adds Theorem 2, which writes
+  the joint analysis under missing single and subset MCA as the analysis of the
+  substantive items and of the answers of those asked plus a term of rank one
+  along eligibility, so that the first axis follows from a secular equation
+  (A6.3 and A6.9), checked by the new `JCE/theory/decomposition_check.R`.
+  A6.4 corrects the statement on independent blocks and the reading of the
+  Davis-Kahan bound, and reports the multiple factor analysis weighting.
+  `JCE/theory/theory_link_summary.R` prints how well the inertia ratio
+  classifies single development samples (its saved summary is unchanged). The
+  appendix gains A8, a scoping search of published indices with filtered items,
+  and the supplement text, table labels and figure labels are reworded for
+  submission. No simulation, extension or package code and no existing result
+  changed.
 - 1.0.4 (19 October 2026): the technical appendix cites two further sources,
   the global MPI's rule for households without the eligible population (A2,
   the "no" coding) and a thesis that found subset correspondence analysis
